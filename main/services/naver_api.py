@@ -64,3 +64,33 @@ class NaverMapService:
             for place in data.get("places", [])
         ]
         return places
+
+    def calculate_midpoint(self, lat1, lon1, lat2, lon2):
+        """
+        두 지점 간의 중간 지점 계산
+        """
+        mid_lat = (lat1 + lat2) / 2
+        mid_lon = (lon1 + lon2) / 2
+        return mid_lat, mid_lon
+
+    def get_directions_url(self, start_lat, start_lon, goal_lat, goal_lon):
+        """
+        네이버 지도 길찾기 URL 생성 함수
+        """
+        return (
+            f"https://m.map.naver.com/search2/directions?"
+            f"start={start_lat},{start_lon}&goal={goal_lat},{goal_lon}&callback=none"
+        )
+
+    def find_nearest_subway_station(self, latitude, longitude):
+        """
+        중간 지점 또는 사용자의 위치에서 근처 지하철역 검색
+        """
+        subway_stations = self.search_place("지하철역", latitude, longitude, radius=1000, count=1)
+        return subway_stations[0] if subway_stations else None
+
+    def get_directions_for_user_and_place(self, user_lat, user_lon, place_lat, place_lon):
+        """
+        사용자 위치와 선택한 카페 간의 길찾기 URL 생성
+        """
+        return self.get_directions_url(user_lat, user_lon, place_lat, place_lon)

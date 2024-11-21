@@ -16,4 +16,3 @@ from .place import (
 from .board import get_board
 from .post import PostListView, PostDetailView
 from .comment import CommentListView, CommentDetailView
-

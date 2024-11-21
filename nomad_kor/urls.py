@@ -23,7 +23,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from main import views
 from main.views import signup_view,LoginView
 from main.views.comment import CommentListView, CommentDetailView
-from main.views.place import add_rating,NearbyCafeListView, CafeDetailView, ReviewListCreateView, ReviewDetailView
+from main.views.place import add_rating, NearbyCafeListView, CafeDetailView, ReviewListCreateView, ReviewDetailView, \
+    find_meeting_place, find_single_user_directions
 from main.views.post import PostListView, PostDetailView
 from main.views.profile import create_profile,ProfileDetailView, ProfileUpdateView
 
@@ -44,11 +45,17 @@ urlpatterns = [
     path('place/reviews/<int:pk>/', ReviewDetailView.as_view(), name='review_detail'),  # 리뷰 수정 및 삭제
     # board_type을 URL 경로로 받아서 처리
     path('boards/<str:board_type>/', views.get_board,name='get_board'),
-
     path('boards/<int:board_id>/posts/', PostListView.as_view(), name='post_list'),
     path('boards/<int:board_id>/posts/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
-    path('api/comments/', CommentListView.as_view(), name='comment_list'),  # 댓글 목록 조회 및 작성
-    path('api/comments/<int:pk>/', CommentDetailView.as_view(), name='comment_detail'),  # 댓글 상세 조회, 수정, 삭제
+    # 댓글 작성 및 조회
+    path('api/boards/<int:board_id>/posts/<int:post_id>/comment/', CommentListView.as_view(), name='comment_list'),
+    # 댓글 수정, 삭제 및 조회
+    path('api/boards/<int:board_id>/posts/<int:post_id>/comment/<int:pk>/', CommentDetailView.as_view(),
+         name='comment_detail'),
+    # 두 명의 사용자가 선택한 카페로 길찾기
+    path('api/meeting/directions/', find_meeting_place, name='find_meeting_place'),
+    # 한 명의 사용자가 선택한 카페로 길찾기
+    path('api/user/directions/', find_single_user_directions, name='find_single_user_directions'),
 ]
 # MEDIA_URL과 MEDIA_ROOT 매핑
 if settings.DEBUG:  # 디버그 모드에서만 동작하도록

@@ -9,6 +9,7 @@ from ..models.review import Review
 from ..models.rating import Rating
 from ..serializers.place import PlaceSerializer
 from ..serializers.review import ReviewSerializer
+from ..services import NaverMapService
 
 
 class NearbyCafeListView(ListCreateAPIView):
@@ -119,3 +120,68 @@ class ReviewDetailView(RetrieveUpdateDestroyAPIView):
         if self.request.user != instance.user:
             raise PermissionError("리뷰를 삭제할 권한이 없습니다.")
         instance.delete()
+@api_view(['POST'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def find_meeting_place(request):
+    """
+    두 사용자의 좌표를 받아 중간 지점 근처 지하철역 검색 및 네이버 길찾기 URL 반환
+    """
+    try:
+        # 사용자 좌표 가져오기
+        data = request.data
+        user1_lat = float(data.get("user1_latitude"))
+        user1_lon = float(data.get("user1_longitude"))
+        user2_lat = float(data.get("user2_latitude"))
+        user2_lon = float(data.get("user2_longitude"))
+
+        # 선택한 카페 ID
+        cafe_id_user1 = int(data.get("cafe_id_user1"))
+        cafe_id_user2 = int(data.get("cafe_id_user2"))
+
+        # NaverMapService 인스턴스 생성
+        naver_service = NaverMapService(client_id="your_client_id", client_secret="your_client_secret")
+
+        # 사용자 1의 선택한 카페 정보
+        cafe_user1 = Place.objects.get(id=cafe_id_user1)
+        user1_to_cafe_url = naver_service.get_directions_for_user_and_place(user1_lat, user1_lon, cafe_user1.latitude, cafe_user1.longitude)
+
+        # 사용자 2의 선택한 카페 정보
+        cafe_user2 = Place.objects.get(id=cafe_id_user2)
+        user2_to_cafe_url = naver_service.get_directions_for_user_and_place(user2_lat, user2_lon, cafe_user2.latitude, cafe_user2.longitude)
+
+        return Response({
+            "user1_to_cafe_url": user1_to_cafe_url,
+            "user2_to_cafe_url": user2_to_cafe_url,
+        }, status=200)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def find_single_user_directions(request):
+    """
+    한 명의 사용자가 자신의 위치에서 선택한 카페로 길찾기 URL 반환
+    """
+    try:
+        # 사용자 좌표 가져오기
+        data = request.data
+        user_lat = float(data.get("user_latitude"))
+        user_lon = float(data.get("user_longitude"))
+
+        # 선택한 카페 ID
+        cafe_id = int(data.get("cafe_id"))
+
+        # NaverMapService 인스턴스 생성
+        naver_service = NaverMapService(client_id="your_client_id", client_secret="your_client_secret")
+
+        # 선택한 카페 정보
+        cafe = Place.objects.get(id=cafe_id)
+        directions_url = naver_service.get_directions_for_user_and_place(user_lat, user_lon, cafe.latitude, cafe.longitude)
+
+        return Response({
+            "directions_url": directions_url,
+        }, status=200)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)

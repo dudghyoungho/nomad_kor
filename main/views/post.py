@@ -1,24 +1,12 @@
-from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, BasePermission
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+# views/post.py
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import Http404
 from ..models import Post, Board, Profile
 from ..serializers import PostSerializer
-
-
-class IsPostAuthorPermission(BasePermission):
-    """
-    글 작성자만 수정 및 삭제 가능.
-    """
-    def has_object_permission(self, request, view, obj):
-        if request.method in ['PUT', 'PATCH', 'DELETE']:
-            return obj.author.user == request.user  # 작성자만 수정/삭제 가능
-        return True
-
-
-# 게시판별 글 목록 조회 및 생성
-from rest_framework.exceptions import ValidationError
 
 
 class PostListView(ListCreateAPIView):
@@ -32,35 +20,40 @@ class PostListView(ListCreateAPIView):
         return Post.objects.filter(board_id=board_id)  # board_id에 해당하는 글만 필터링하여 반환
 
     def perform_create(self, serializer):
-        board_id = self.request.data.get("board_id")
+        # 요청 본문에서 데이터를 가져옵니다.
         title = self.request.data.get("title")
         content = self.request.data.get("content")
-        nickname = self.request.data.get("nickname")  # nickname을 받아옴
 
-        if not board_id or not title or not content or not nickname:
-            raise ValidationError("Board ID, title, content, and nickname are required.")
+        # 필수 항목이 없으면 오류 처리
+        if not title or not content:
+            raise ValidationError("Title and content are required.")
 
-        # nickname으로 Profile을 찾음
+        # 로그인한 사용자의 Profile을 가져옵니다.
+        profile = self.request.user.profile  # request.user.profile로 로그인한 사용자의 프로필을 가져옵니다.
+
+        # URL에서 board_id 가져오기
+        board_id = self.kwargs.get('board_id')
+
+        # 게시판 찾기
         try:
-            profile = Profile.objects.get(nickname=nickname)  # nickname으로 Profile을 검색
-        except Profile.DoesNotExist:
-            raise ValidationError(f"Profile with nickname '{nickname}' does not exist.")
+            board = Board.objects.get(id=board_id)
+        except Board.DoesNotExist:
+            raise ValidationError("Board not found.")
 
-        board = Board.objects.get(id=board_id)
-
-        # `author` 필드를 `nickname`으로 찾은 `Profile`로 설정
-        serializer.save(
+        # `Post` 객체 생성
+        post = serializer.save(
             board=board,
-            author=profile,  # Profile 객체를 `author`로 설정
+            author=profile,  # `author`는 로그인한 사용자의 `Profile` 객체로 설정
             title=title,
             content=content
         )
+        return post
 
 
 # 게시판별 글 상세 조회, 수정, 삭제
 class PostDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsPostAuthorPermission]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_object(self):
         board_id = self.kwargs.get('board_id')  # URL에서 board_id 가져오기
