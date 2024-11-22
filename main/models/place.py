@@ -1,5 +1,4 @@
 from django.db import models
-
 class Place(models.Model):
     name = models.CharField(max_length=200)  # 장소 이름
     latitude = models.FloatField()  # 위도

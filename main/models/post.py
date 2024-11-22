@@ -1,4 +1,3 @@
-# models/post.py
 from django.db import models
 from . import Board
 from .profile import Profile  # Profile 모델을 import

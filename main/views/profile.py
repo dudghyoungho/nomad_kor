@@ -10,7 +10,7 @@ from ..serializers.profile import ProfileSerializer
 @permission_classes([IsAuthenticated])
 def create_profile(request):
     """
-    프로필 생성 (nickname, age, gender 필수)
+    프로필 생성 (nickname, age, gender, job 필수)
     """
     user = request.user
     if Profile.objects.filter(user=user).exists():
@@ -50,3 +50,4 @@ class ProfileUpdateView(RetrieveUpdateAPIView):
         현재 로그인된 유저의 프로필 반환
         """
         return Profile.objects.get(user=self.request.user)
+
