@@ -48,9 +48,9 @@ urlpatterns = [
     path('boards/<int:board_id>/posts/', PostListView.as_view(), name='post_list'),
     path('boards/<int:board_id>/posts/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
     # 댓글 작성 및 조회
-    path('api/boards/<int:board_id>/posts/<int:post_id>/comment/', CommentListView.as_view(), name='comment_list'),
-    # 댓글 수정, 삭제 및 조회
-    path('api/boards/<int:board_id>/posts/<int:post_id>/comment/<int:pk>/', CommentDetailView.as_view(),
+    path('boards/<int:board_id>/posts/<int:post_id>/comment/', CommentListView.as_view(), name='comment_list'),
+    # 댓글 수정 및 삭제
+    path('boards/<int:board_id>/posts/<int:post_id>/comment/<int:pk>/', CommentDetailView.as_view(),
          name='comment_detail'),
     # 두 명의 사용자가 선택한 카페로 길찾기
     path('api/meeting/directions/', find_meeting_place, name='find_meeting_place'),
