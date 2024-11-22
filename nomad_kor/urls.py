@@ -29,6 +29,7 @@ from main.views.post import PostListView, PostDetailView
 from main.views.profile import create_profile,ProfileDetailView, ProfileUpdateView
 
 urlpatterns = [
+    path('admin/', admin.site.urls),  # Django 관리자 URL
     # JWT 토큰 발급 (로그인)
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # JWT 토큰 갱신
