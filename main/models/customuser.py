@@ -7,7 +7,7 @@ class CustomUserManager(BaseUserManager):
         if not username:
             raise ValueError("The Username field must be set")
         user = self.model(username=username, **extra_fields)
-        user.set_password(password)  # 비밀번호 해싱
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -24,11 +24,14 @@ class CustomUserManager(BaseUserManager):
 
 # CustomUser 모델 정의
 class CustomUser(AbstractUser):
-    first_name = None  # 불필요한 필드 제거
+    first_name = None
     last_name = None
-    email = None       # 이메일 필드 제거
+    email = None
 
-    objects = CustomUserManager()  # CustomUserManager 연결
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'username'  # 로그인에 사용할 필드
+    REQUIRED_FIELDS = []  # 추가 필수 필드를 비워둠
 
     def __str__(self):
         return self.username
