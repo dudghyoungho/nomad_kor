@@ -4,7 +4,8 @@ from rest_framework.exceptions import ValidationError
 from ..models import Post, Comment
 from ..serializers.comment import CommentSerializer
 from django.http import Http404
-
+from django.core.cache import cache
+from django.core.cache import cache
 class IsAuthorOrPostAuthorPermission(BasePermission):
     """
     댓글 작성자만 댓글 수정 및 삭제 가능. 비밀 댓글/대댓글은 게시글 작성자와 댓글 작성자만 볼 수 있음.
@@ -72,8 +73,11 @@ class CommentListView(generics.ListCreateAPIView):
         parent = None
 
         if parent_id:  # 대댓글인 경우
-            parent = Comment.objects.get(id=parent_id)
-            is_private = True  # 대댓글은 기본적으로 비밀 댓글
+            try:
+                parent = Comment.objects.get(id=parent_id)
+            except Comment.DoesNotExist:
+                raise ValidationError({"parent": f"Parent comment with ID {parent_id} not found."})
+            # 작성자가 is_private를 선택할 수 있으므로 기본 설정 제거
 
         # 게시글 찾기
         if position_id:
@@ -94,15 +98,29 @@ class CommentListView(generics.ListCreateAPIView):
         else:
             raise ValidationError({"error": "Invalid board type in URL."})
 
-        # 익명 게시판인 경우 author_name을 "익명"으로 설정
+        # 익명 게시판인 경우
         if 'anonymous' in self.request.path:
-            author_name = "익명"
+            # 캐시를 사용하여 프로필별 익명 번호 관리
+            user_profile = self.request.user.profile
+            author_name = cache.get(f"anonymous_name_{user_profile.id}")
+
+            if not author_name:
+                # 새로운 익명 번호 생성
+                max_anonymous_number = cache.get("max_anonymous_number", 0) + 1
+                cache.set("max_anonymous_number", max_anonymous_number)
+                author_name = f"익명{max_anonymous_number}"
+                cache.set(f"anonymous_name_{user_profile.id}", author_name)
+
+            # 글 작성자는 특별히 "익명(작성자)"으로 설정
+            if post.author == user_profile:
+                author_name = "익명(작성자)"
         else:
             author_name = self.request.user.profile.nickname  # 프로필의 nickname 사용
 
         # 댓글 저장
         serializer.save(post=post, author=self.request.user.profile, author_name=author_name,
                         is_private=is_private, parent=parent)
+
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
