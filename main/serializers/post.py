@@ -1,12 +1,9 @@
-# serializers/post.py
 from rest_framework import serializers
-from ..models import Post
+from ..models.post import Post
 
 class PostSerializer(serializers.ModelSerializer):
-    board = serializers.ReadOnlyField(source='board.id')  # board 필드를 읽기 전용으로 설정
-    author = serializers.ReadOnlyField(source='author.nickname')  # 클라이언트가 제공하지 않아도 됨
+    author_name = serializers.CharField(read_only=True)  # 여기에서 author_name을 read_only로 설정해줘야 perform_create에서 설정된 값을 그대로 사용합니다.
 
     class Meta:
         model = Post
-        fields = ['id', 'board', 'author', 'title', 'content', 'created_at']
-
+        fields = ['id', 'author_name', 'title', 'content', 'image', 'created_at']

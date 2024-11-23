@@ -1,76 +1,77 @@
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, BasePermission, SAFE_METHODS
-from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.exceptions import ValidationError
 from django.http import Http404
-from ..models import Post, Board, Profile
-from ..serializers import PostSerializer
-
-
-class IsAuthorOrReadOnly(BasePermission):
-    """
-    게시글 작성자만 수정 및 삭제 가능
-    """
-
-    def has_object_permission(self, request, view, obj):
-        # 읽기 요청(GET, HEAD, OPTIONS)은 모두 허용
-        if request.method in SAFE_METHODS:
-            return True
-
-        # 수정 및 삭제 요청은 작성자만 가능
-        return obj.author == request.user.profile
-
+from ..serializers.post import PostSerializer
+from ..models import Position, FTF, Anonymous, Profile  # FTF 모델을 추가로 임포트
 
 class PostListView(ListCreateAPIView):
+    """
+    게시글 목록 조회 및 생성
+    """
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get_queryset(self):
-        board_id = self.kwargs.get('board_id')  # URL에서 board_id를 가져옴
-        if not board_id:
-            return Post.objects.none()  # board_id가 없으면 빈 리스트 반환
-        return Post.objects.filter(board_id=board_id)  # board_id에 해당하는 글만 필터링하여 반환
-
     def perform_create(self, serializer):
-        # 로그인한 사용자의 Profile 가져오기
-        try:
-            profile = self.request.user.profile
-        except Profile.DoesNotExist:
-            raise ValidationError("User profile not found. Please create a profile first.")
+        path = self.request.path
 
-        # URL에서 board_id 가져오기
-        board_id = self.kwargs.get('board_id')
-        try:
-            board = Board.objects.get(id=board_id)
-        except Board.DoesNotExist:
-            raise ValidationError("Board not found.")
+        if 'position' in path:
+            position_id = self.kwargs.get('position_id')
+            if not position_id:
+                raise ValidationError({"position": "Position ID is missing from the request URL."})
 
-        # 요청 데이터에서 title과 content 확인
-        title = self.request.data.get("title")
-        content = self.request.data.get("content")
+            try:
+                position = Position.objects.get(id=position_id)
+            except Position.DoesNotExist:
+                raise ValidationError({"position": f"Position with the given ID {position_id} does not exist."})
 
-        # 필수 값 확인
-        if not title or not content:
-            raise ValidationError("Title and content are required.")
+            # 게시글 저장 (Position 게시판)
+            serializer.save(position=position, author=self.request.user.profile,
+                            author_name=self.request.user.profile.nickname)
 
-        # Post 객체 생성 및 저장
-        serializer.save(
-            board=board,  # URL에서 가져온 board를 명시적으로 설정
-            author=profile,  # 로그인한 사용자의 Profile 객체를 author로 설정
-            title=title,
-            content=content
-        )
+        elif 'ftf' in path:
+            ftf_id = self.kwargs.get('ftf_id')
+            if not ftf_id:
+                raise ValidationError({"ftf": "FTF ID is missing from the request URL."})
+
+            try:
+                ftf = FTF.objects.get(id=ftf_id)
+            except FTF.DoesNotExist:
+                raise ValidationError({"ftf": f"FTF with the given ID {ftf_id} does not exist."})
+
+            # 게시글 저장 (FTF 게시판)
+            serializer.save(ftf=ftf, author=self.request.user.profile, author_name=self.request.user.profile.nickname)
+
+        elif 'anonymous' in path:
+            anonymous_id = self.kwargs.get('anonymous_id')
+            if not anonymous_id:
+                raise ValidationError({"anonymous": "Anonymous ID is missing from the request URL."})
+
+            try:
+                anonymous = Anonymous.objects.get(id=anonymous_id)
+            except Anonymous.DoesNotExist:
+                raise ValidationError(
+                    {"anonymous": f"Anonymous board with the given ID {anonymous_id} does not exist."})
+
+            # 게시글 저장 (익명 게시판)
+            serializer.save(anonymous=anonymous, author=self.request.user.profile,
+                            author_name="익명")  # 익명 게시판은 "익명"으로 저장
+
+        else:
+            raise ValidationError({"error": "Invalid board type in URL."})
 
 
-# 게시판별 글 상세 조회, 수정, 삭제
 class PostDetailView(RetrieveUpdateDestroyAPIView):
+    """
+    게시글 상세 조회, 수정 및 삭제
+    """
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]  # 작성자 권한 추가
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_object(self):
-        board_id = self.kwargs.get('board_id')  # URL에서 board_id 가져오기
-        post_id = self.kwargs.get('pk')  # URL에서 글 ID 가져오기
+        board_id = self.kwargs.get('board_id')
+        post_id = self.kwargs.get('pk')
+
         try:
             return Post.objects.get(board_id=board_id, id=post_id)
         except Post.DoesNotExist:

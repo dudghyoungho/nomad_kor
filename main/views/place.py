@@ -1,5 +1,5 @@
 from django.db.models.functions import ACos, Cos, Radians, Sin
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view, permission_classes
@@ -9,6 +9,7 @@ from ..models.review import Review
 from ..models.rating import Rating
 from ..serializers.place import PlaceSerializer
 from ..serializers.review import ReviewSerializer
+from ..serializers.rating import RatingSerializer  # RatingSerializer 추가
 from ..services import NaverMapService
 
 
@@ -35,13 +36,7 @@ class NearbyCafeListView(ListCreateAPIView):
             )
         ).filter(distance__lte=1.0)  # 1km 이내 필터링
 
-        # 프로퍼티 필터링: "집중하기 좋아요" 상위 3위에 포함
-        filtered_cafes = [
-            cafe for cafe in cafes
-            if "집중하기 좋아요" in sorted(cafe.reviews.items(), key=lambda x: x[1], reverse=True)[:3]
-        ]
-
-        return filtered_cafes[:5]  # 최대 5개 반환
+        return cafes[:5]  # 최대 5개 반환
 
 
 class CafeDetailView(RetrieveUpdateDestroyAPIView):
@@ -78,13 +73,29 @@ def add_rating(request, cafe_id):
         cafe.rating = avg_rating
         cafe.save()
 
+        # 직렬화기 사용
+        serializer = RatingSerializer(rating)
+
         return Response({
             "message": "별점이 성공적으로 추가되었습니다.",
+            "rating": serializer.data,  # 새로 추가된 별점 데이터 반환
             "average_rating": avg_rating
         }, status=201)
 
     except Place.DoesNotExist:
         return Response({"error": "해당 카페를 찾을 수 없습니다."}, status=404)
+
+
+class RatingListView(ListAPIView):
+    """
+    특정 장소의 별점 목록 반환.
+    """
+    serializer_class = RatingSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        cafe_id = self.kwargs.get('cafe_id')
+        return Rating.objects.filter(place_id=cafe_id)
 
 
 class ReviewListCreateView(ListCreateAPIView):
@@ -120,6 +131,8 @@ class ReviewDetailView(RetrieveUpdateDestroyAPIView):
         if self.request.user != instance.user:
             raise PermissionError("리뷰를 삭제할 권한이 없습니다.")
         instance.delete()
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def find_meeting_place(request):
@@ -127,25 +140,20 @@ def find_meeting_place(request):
     두 사용자의 좌표를 받아 중간 지점 근처 지하철역 검색 및 네이버 길찾기 URL 반환
     """
     try:
-        # 사용자 좌표 가져오기
         data = request.data
         user1_lat = float(data.get("user1_latitude"))
         user1_lon = float(data.get("user1_longitude"))
         user2_lat = float(data.get("user2_latitude"))
         user2_lon = float(data.get("user2_longitude"))
 
-        # 선택한 카페 ID
         cafe_id_user1 = int(data.get("cafe_id_user1"))
         cafe_id_user2 = int(data.get("cafe_id_user2"))
 
-        # NaverMapService 인스턴스 생성
         naver_service = NaverMapService(client_id="your_client_id", client_secret="your_client_secret")
 
-        # 사용자 1의 선택한 카페 정보
         cafe_user1 = Place.objects.get(id=cafe_id_user1)
         user1_to_cafe_url = naver_service.get_directions_for_user_and_place(user1_lat, user1_lon, cafe_user1.latitude, cafe_user1.longitude)
 
-        # 사용자 2의 선택한 카페 정보
         cafe_user2 = Place.objects.get(id=cafe_id_user2)
         user2_to_cafe_url = naver_service.get_directions_for_user_and_place(user2_lat, user2_lon, cafe_user2.latitude, cafe_user2.longitude)
 
@@ -157,6 +165,7 @@ def find_meeting_place(request):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def find_single_user_directions(request):
@@ -164,18 +173,14 @@ def find_single_user_directions(request):
     한 명의 사용자가 자신의 위치에서 선택한 카페로 길찾기 URL 반환
     """
     try:
-        # 사용자 좌표 가져오기
         data = request.data
         user_lat = float(data.get("user_latitude"))
         user_lon = float(data.get("user_longitude"))
 
-        # 선택한 카페 ID
         cafe_id = int(data.get("cafe_id"))
 
-        # NaverMapService 인스턴스 생성
         naver_service = NaverMapService(client_id="your_client_id", client_secret="your_client_secret")
 
-        # 선택한 카페 정보
         cafe = Place.objects.get(id=cafe_id)
         directions_url = naver_service.get_directions_for_user_and_place(user_lat, user_lon, cafe.latitude, cafe.longitude)
 

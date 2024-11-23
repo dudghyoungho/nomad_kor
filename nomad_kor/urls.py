@@ -20,44 +20,78 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from main import views
-from main.views import signup_view,LoginView
-from main.views.comment import CommentListView, CommentDetailView
-from main.views.place import add_rating, NearbyCafeListView, CafeDetailView, ReviewListCreateView, ReviewDetailView, \
-    find_meeting_place, find_single_user_directions
+# main 앱의 views import
+from main.views.signup import signup_view  # signup 관련 수정
+from main.views.login import LoginView  # Login 관련 수정
+from main.views.profile import create_profile, ProfileDetailView, ProfileUpdateView
+from main.views.position import PositionListView, PositionDetailView
+from main.views.ftf import FTFListView, FTFDetailView
+from main.views.anonymous import AnonymousListView, AnonymousDetailView
 from main.views.post import PostListView, PostDetailView
-from main.views.profile import create_profile,ProfileDetailView, ProfileUpdateView
+from main.views.comment import CommentListView, CommentDetailView
+from main.views.place import (
+    add_rating, NearbyCafeListView, CafeDetailView,
+    ReviewListCreateView, ReviewDetailView, find_meeting_place,
+    find_single_user_directions, RatingListView
+)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Django 관리자 URL
-    # JWT 토큰 발급 (로그인)
+    # 관리자 페이지
+    path('admin/', admin.site.urls),
+
+    # JWT 토큰
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # JWT 토큰 갱신
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('signup/', signup_view, name='signup'),  # 회원가입
-    path('login/', LoginView.as_view(), name='login'),  # 로그인
+
+    # 인증 및 프로필
+    path('signup/', signup_view, name='signup'),
+    path('login/', LoginView.as_view(), name='login'),
     path('profile/create/', create_profile, name='create_profile'),
     path('profile/', ProfileDetailView.as_view(), name='profile_detail'),
     path('profile/update/', ProfileUpdateView.as_view(), name='profile_update'),
-    path('places/nearby/', NearbyCafeListView.as_view(), name='nearby_cafes'),  # 근처 카페 리스트
-    path('place/detail/<int:pk>/', CafeDetailView.as_view(), name='cafe_detail'),  # 특정 카페 세부 정보
-    path('place/<int:cafe_id>/rating/', add_rating, name='add_rating'),  # 별점 추가
-    path('place/<int:cafe_id>/reviews/', ReviewListCreateView.as_view(), name='review_list_create'),  # 리뷰 조회 및 작성
-    path('place/reviews/<int:pk>/', ReviewDetailView.as_view(), name='review_detail'),  # 리뷰 수정 및 삭제
-    # board_type을 URL 경로로 받아서 처리
-    path('boards/<str:board_type>/', views.get_board,name='get_board'),
-    path('boards/<int:board_id>/posts/', PostListView.as_view(), name='post_list'),
-    path('boards/<int:board_id>/posts/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
-    # 댓글 작성 및 조회
-    path('boards/<int:board_id>/posts/<int:post_id>/comment/', CommentListView.as_view(), name='comment_list'),
-    # 댓글 수정 및 삭제
-    path('boards/<int:board_id>/posts/<int:post_id>/comment/<int:pk>/', CommentDetailView.as_view(),
-         name='comment_detail'),
-    # 두 명의 사용자가 선택한 카페로 길찾기
-    path('api/meeting/directions/', find_meeting_place, name='find_meeting_place'),
-    # 한 명의 사용자가 선택한 카페로 길찾기
-    path('api/user/directions/', find_single_user_directions, name='find_single_user_directions'),
+
+    # 카페 관련
+    path('places/nearby/', NearbyCafeListView.as_view(), name='nearby-cafes'),
+    path('places/<int:cafe_id>/', CafeDetailView.as_view(), name='cafe-detail'),
+    path('places/<int:cafe_id>/add-rating/', add_rating, name='add-rating'),
+    path('places/<int:cafe_id>/ratings/', RatingListView.as_view(), name='rating-list'),
+    path('places/<int:cafe_id>/reviews/', ReviewListCreateView.as_view(), name='review-list-create'),
+    path('reviews/<int:pk>/', ReviewDetailView.as_view(), name='review-detail'),
+
+    # 길찾기
+    path('meeting-place/', find_meeting_place, name='find-meeting-place'),
+    path('single-directions/', find_single_user_directions, name='single-directions'),
+
+    # Position 게시판
+    path('networking/position/', PositionListView.as_view(), name='position-list-create'),
+    path('networking/position/<int:position_id>/', PositionDetailView.as_view(), name='position-detail'),
+    # Position 게시판의 게시글
+    path('networking/position/<int:position_id>/posts/', PostListView.as_view(), name='position-post-list'),
+    path('networking/position/<int:position_id>/posts/<int:pk>/', PostDetailView.as_view(), name='position-post-detail'),
+    # Position 게시판 댓글
+    # 게시글에 대한 댓글을 작성하기 위한 URL
+    path('networking/position/<int:position_id>/posts/<int:post_id>/comments/', CommentListView.as_view(),
+         name='position-comment-list'),
+    path('networking/position/<int:position_id>/posts/<int:post_id>/comments/<int:pk>/', CommentDetailView.as_view(),
+         name='position-comment-detail'),
+
+    # FTF 게시판
+    path('network/ftf/', FTFListView.as_view(), name='ftf-list'),
+    path('network/ftf/<int:ftf_id>/', FTFDetailView.as_view(), name='ftf-detail'),
+    path('network/ftf/<int:ftf_id>/posts/', PostListView.as_view(), name='ftf-post-list'),
+    path('network/ftf/<int:ftf_id>/posts/<int:pk>/', PostDetailView.as_view(), name='ftf-post-detail'),
+    path('network/ftf/<int:ftf_id>/posts/<int:post_id>/comments/', CommentListView.as_view(), name='ftf-comment-list'),
+    path('network/ftf/<int:ftf_id>/posts/<int:post_id>/comments/<int:pk>/', CommentDetailView.as_view(), name='ftf-comment-detail'),
+
+    # 익명 게시판
+    path('network/anonymous/', AnonymousListView.as_view(), name='anonymous-list'),
+    path('network/anonymous/<int:anonymous_id>/', AnonymousDetailView.as_view(), name='anonymous-detail'),
+    path('network/anonymous/<int:anonymous_id>/posts/', PostListView.as_view(), name='anonymous-post-list'),
+    path('network/anonymous/<int:anonymous_id>/posts/<int:pk>/', PostDetailView.as_view(), name='anonymous-post-detail'),
+    path('network/anonymous/<int:anonymous_id>/posts/<int:post_id>/comments/', CommentListView.as_view(), name='anonymous-comment-list'),
+    path('network/anonymous/<int:anonymous_id>/posts/<int:post_id>/comments/<int:pk>/', CommentDetailView.as_view(), name='anonymous-comment-detail'),
 ]
-# MEDIA_URL과 MEDIA_ROOT 매핑
-if settings.DEBUG:  # 디버그 모드에서만 동작하도록
+
+# 미디어 파일 제공 (개발 환경에서만)
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
