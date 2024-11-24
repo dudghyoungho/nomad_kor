@@ -56,7 +56,6 @@ class FTFListView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
-
 class FTFDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     FTF 게시판 상세 조회, 수정 및 삭제
@@ -64,13 +63,14 @@ class FTFDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = FTFSerializer
     queryset = FTF.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
+    lookup_field = 'id'  # 기본 키를 사용하도록 설정
 
     @swagger_auto_schema(
         operation_summary="FTF 게시판 상세 조회",
         operation_description="특정 FTF 게시판의 상세 정보를 반환합니다.",
         responses={
             200: openapi.Response(description="성공", schema=ftf_response_schema),
-            404: openapi.Response(description="게시판을 찾을 수 없습니다.")
+            404: openapi.Response(description="게시판을 찾을 수 없습니다."),
         }
     )
     def get(self, request, *args, **kwargs):
@@ -83,7 +83,7 @@ class FTFDetailView(generics.RetrieveUpdateDestroyAPIView):
         responses={
             200: openapi.Response(description="수정 성공", schema=ftf_response_schema),
             400: openapi.Response(description="잘못된 요청"),
-            404: openapi.Response(description="게시판을 찾을 수 없습니다.")
+            404: openapi.Response(description="게시판을 찾을 수 없습니다."),
         }
     )
     def patch(self, request, *args, **kwargs):
@@ -94,10 +94,11 @@ class FTFDetailView(generics.RetrieveUpdateDestroyAPIView):
         operation_description="특정 FTF 게시판을 삭제합니다.",
         responses={
             204: openapi.Response(description="삭제 성공"),
-            404: openapi.Response(description="게시판을 찾을 수 없습니다.")
+            404: openapi.Response(description="게시판을 찾을 수 없습니다."),
         }
     )
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
 
 

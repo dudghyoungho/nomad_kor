@@ -2,8 +2,8 @@ from .position import PositionListView, PositionDetailView
 from .comment import CommentDetailView, CommentListView
 from .login import LoginView
 from .place import (
-    NearbyCafeListView, CafeDetailView, RatingListView,
-    ReviewListCreateView, ReviewDetailView,
+    NearbyCafeListView, CafeDetailView, RatingListView, RatingDetailView,
+    ReviewListView, ReviewDetailView,
 )
 from .direction import find_meeting_place, find_single_user_direction
 from .post import PostListView, PostDetailView

@@ -37,21 +37,23 @@ from main.views.comment import CommentListView, CommentDetailView
 
 # 카페 및 장소 관련 뷰
 from main.views.place import (
-    add_rating, NearbyCafeListView, CafeDetailView,
-    ReviewListCreateView, ReviewDetailView, RatingListView,
+    NearbyCafeListView, CafeDetailView, RatingListView, RatingDetailView,
+    ReviewListView, ReviewDetailView
 )
 #길찾기 관련 뷰
 from main.views.direction import find_meeting_place, find_single_user_direction
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Nomad_Kor API",
+        title="Nomad_Kor API Documentation",
         default_version='v1',
-        description="Nomad_Kor 프로젝트의 API 문서",
+        description="API 문서입니다. JWT 토큰을 사용하여 인증이 가능합니다.",
         contact=openapi.Contact(email="chsm7288@naver.com"),
+        license=openapi.License(name="Custom License"),
     ),
     public=True,
     permission_classes=([permissions.AllowAny]),
+    authentication_classes=[],  # 인증 클래스를 추가합니다
 )
 
 urlpatterns = [
@@ -74,12 +76,17 @@ urlpatterns = [
     path('profile/update/', ProfileUpdateView.as_view(), name='profile_update'),
 
     # 카페 관련
-    path('places/nearby/', NearbyCafeListView.as_view(), name='nearby-cafes'),
-    path('places/<int:cafe_id>/', CafeDetailView.as_view(), name='cafe-detail'),
-    path('places/<int:cafe_id>/add-rating/', add_rating, name='add-rating'),
-    path('places/<int:cafe_id>/ratings/', RatingListView.as_view(), name='rating-list'),
-    path('places/<int:cafe_id>/reviews/', ReviewListCreateView.as_view(), name='review-list-create'),
-    path('reviews/<int:pk>/', ReviewDetailView.as_view(), name='review-detail'),
+    path('places/nearby/', NearbyCafeListView.as_view(), name='nearby-cafes'),  # 주변 카페 목록 조회
+    path('places/<int:cafe_id>/', CafeDetailView.as_view(), name='cafe-detail'),  # 카페 상세 조회
+
+    #별점 관련
+    path('places/<int:cafe_id>/rating/', RatingListView.as_view(), name='add-rating-and-average-rating'),
+    # 별점 추가 및 평균 별점 조회
+    path('places/<int:cafe_id>/ratings/<int:pk>/', RatingDetailView.as_view(), name='rating-detail'),  # 별점 수정 및 삭제
+
+    # 리뷰 관련
+    path('places/<int:cafe_id>/reviews/', ReviewListView.as_view(), name='review-list-create'),  # 리뷰 목록 조회 및 작성
+    path('reviews/<int:pk>/', ReviewDetailView.as_view(), name='review-detail'),  # 리뷰 상세 조회 및 수정
 
     # 길찾기
     path('directions/meeting/', find_meeting_place, name='find-meeting-place'),
@@ -87,7 +94,7 @@ urlpatterns = [
 
     # Position 게시판
     path('network/position/', PositionListView.as_view(), name='position-list'),
-    path('network/position/<int:position_id>/', PositionDetailView.as_view(), name='position-detail'),
+    path('network/position/<int:pk>/', PositionDetailView.as_view(), name='position-detail'),
     # Position 게시판의 게시글
     path('network/position/<int:position_id>/posts/', PostListView.as_view(), name='position-post-list'),
     path('network/position/<int:position_id>/posts/<int:pk>/', PostDetailView.as_view(), name='position-post-detail'),
@@ -100,7 +107,7 @@ urlpatterns = [
 
     # FTF 게시판
     path('network/ftf/', FTFListView.as_view(), name='ftf-list'),
-    path('network/ftf/<int:ftf_id>/', FTFDetailView.as_view(), name='ftf-detail'),
+    path('network/ftf/<int:id>/', FTFDetailView.as_view(), name='ftf-detail'),  # <int:id>로 수정
     path('network/ftf/<int:ftf_id>/posts/', PostListView.as_view(), name='ftf-post-list'),
     path('network/ftf/<int:ftf_id>/posts/<int:pk>/', PostDetailView.as_view(), name='ftf-post-detail'),
     path('network/ftf/<int:ftf_id>/posts/<int:post_id>/comments/', CommentListView.as_view(), name='ftf-comment-list'),

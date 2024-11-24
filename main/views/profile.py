@@ -65,6 +65,7 @@ def create_profile(request):
     프로필 생성 (nickname, age, gender, job, area 필수)
     """
     user = request.user
+    # 프로필이 이미 존재하는지 확인
     if Profile.objects.filter(user=user).exists():
         return Response({"error": "프로필이 이미 존재합니다."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -98,7 +99,10 @@ class ProfileDetailView(RetrieveAPIView):
         """
         현재 로그인된 유저의 프로필 반환
         """
-        return Profile.objects.get(user=self.request.user)
+        try:
+            return Profile.objects.get(user=self.request.user)
+        except Profile.DoesNotExist:
+            return None
 
 
 class ProfileUpdateView(RetrieveUpdateAPIView):
@@ -124,4 +128,21 @@ class ProfileUpdateView(RetrieveUpdateAPIView):
         """
         현재 로그인된 유저의 프로필 반환
         """
-        return Profile.objects.get(user=self.request.user)
+        try:
+            return Profile.objects.get(user=self.request.user)
+        except Profile.DoesNotExist:
+            return None
+
+    def update(self, request, *args, **kwargs):
+        """
+        프로필을 업데이트하는 메서드
+        """
+        profile = self.get_object()
+        if profile is None:
+            return Response({"error": "프로필이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

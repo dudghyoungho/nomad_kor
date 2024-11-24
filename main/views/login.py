@@ -5,6 +5,7 @@ from ..models.profile import Profile
 from django.contrib.auth import authenticate, get_user_model
 from django.http import JsonResponse
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny  # 인증 없이 접근 가능하게 하기 위한 permission
 
 User = get_user_model()
 
@@ -38,6 +39,8 @@ login_error_schema = openapi.Schema(
 )
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]  # 인증 없이 접근 가능하도록 설정
+
     @swagger_auto_schema(
         operation_summary="로그인",
         operation_description="사용자의 아이디와 비밀번호를 확인하여 JWT 토큰을 발급합니다.",

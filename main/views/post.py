@@ -6,7 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from ..serializers.post import PostSerializer
 from ..models import Position, FTF, Anonymous, Post
-
+from rest_framework.exceptions import NotFound
 # Swagger 요청 및 응답 스키마 정의
 post_create_request_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT,
@@ -37,6 +37,22 @@ class PostListView(ListCreateAPIView):
     """
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        """
+        게시판 유형별로 게시글을 필터링합니다.
+        """
+        path = self.request.path
+        if 'position' in path:
+            position_id = self.kwargs.get('position_id')
+            return Post.objects.filter(position_id=position_id)
+        elif 'ftf' in path:
+            ftf_id = self.kwargs.get('ftf_id')
+            return Post.objects.filter(ftf_id=ftf_id)
+        elif 'anonymous' in path:
+            anonymous_id = self.kwargs.get('anonymous_id')
+            return Post.objects.filter(anonymous_id=anonymous_id)
+        return Post.objects.none()  # 잘못된 URL에 대해서는 빈 쿼리셋 반환
 
     # Swagger 데코레이터를 get/post 각각 적용
     @swagger_auto_schema(
@@ -113,8 +129,8 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
     """
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Post.objects.all()  # 기본 queryset 설정
 
-    # 각각의 HTTP 메서드에 Swagger 데코레이터 적용
     @swagger_auto_schema(
         operation_summary="게시글 상세 조회",
         operation_description="특정 게시글의 정보를 조회합니다.",
@@ -151,10 +167,33 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
     def get_object(self):
-        board_id = self.kwargs.get('board_id')
         post_id = self.kwargs.get('pk')
 
-        try:
-            return Post.objects.get(board_id=board_id, id=post_id)
-        except Post.DoesNotExist:
-            raise Http404("Post not found.")
+        # Position 게시판 처리
+        if 'position' in self.request.path:
+            position_id = self.kwargs.get('position_id')
+            try:
+                return Post.objects.get(position_id=position_id, id=post_id)
+            except Post.DoesNotExist:
+                raise NotFound("Post not found for the given Position board.")
+
+        # Anonymous 게시판 처리
+        elif 'anonymous' in self.request.path:
+            anonymous_id = self.kwargs.get('anonymous_id')
+            try:
+                return Post.objects.get(anonymous_id=anonymous_id, id=post_id)
+            except Post.DoesNotExist:
+                raise NotFound("Post not found for the given Anonymous board.")
+
+        # FTF 게시판 처리
+        elif 'ftf' in self.request.path:
+            ftf_id = self.kwargs.get('ftf_id')
+            try:
+                return Post.objects.get(ftf_id=ftf_id, id=post_id)
+            except Post.DoesNotExist:
+                raise NotFound("Post not found for the given FTF board.")
+
+        # 예외 처리
+        else:
+            raise NotFound("Invalid board type in the URL.")
+

@@ -103,10 +103,4 @@ class AnonymousDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-class AnonymousDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    익명 게시판 상세 조회, 수정 및 삭제
-    """
-    queryset = Anonymous.objects.all()
-    serializer_class = AnonymousSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+
