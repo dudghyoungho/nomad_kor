@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -122,7 +123,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # 정적 파일이 모일 경로 (필요하면)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -130,8 +133,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'main.CustomUser'
 # Media 파일 설정
-MEDIA_URL = '/media/'  # URL 경로
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 실제 파일 저장 위치
+MEDIA_URL = '/media/'  # 업로드된 파일의 URL 경로
+MEDIA_ROOT = BASE_DIR / 'media'  # 업로드된 파일이 저장될 실제 디렉토리
 
 # Django REST framework의 기본 인증 클래스 설정
 REST_FRAMEWORK = {

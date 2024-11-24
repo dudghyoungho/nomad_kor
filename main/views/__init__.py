@@ -7,6 +7,6 @@ from .place import (
     find_single_user_directions
 )
 from .post import PostListView, PostDetailView
-from .signup import signup_view
+from .signup import SignupView
 from .ftf import FTFListView, FTFDetailView
 from .anonymous import AnonymousListView, AnonymousDetailView

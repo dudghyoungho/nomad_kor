@@ -7,6 +7,30 @@ from drf_yasg import openapi
 from ..serializers.post import PostSerializer
 from ..models import Position, FTF, Anonymous, Post
 
+# Swagger 요청 및 응답 스키마 정의
+post_create_request_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'title': openapi.Schema(type=openapi.TYPE_STRING, description='게시글 제목'),
+        'content': openapi.Schema(type=openapi.TYPE_STRING, description='게시글 내용'),
+        'image': openapi.Schema(type=openapi.TYPE_STRING, format='binary', description='첨부 이미지 (선택)'),
+    },
+    required=['title', 'content']
+)
+
+post_response_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'id': openapi.Schema(type=openapi.TYPE_INTEGER, description='게시글 ID'),
+        'author_name': openapi.Schema(type=openapi.TYPE_STRING, description='작성자 이름'),
+        'title': openapi.Schema(type=openapi.TYPE_STRING, description='게시글 제목'),
+        'content': openapi.Schema(type=openapi.TYPE_STRING, description='게시글 내용'),
+        'image': openapi.Schema(type=openapi.TYPE_STRING, description='첨부 이미지 URL'),
+        'created_at': openapi.Schema(type=openapi.TYPE_STRING, format='datetime', description='작성일시'),
+    }
+)
+
+
 class PostListView(ListCreateAPIView):
     """
     게시글 목록 조회 및 생성
@@ -14,39 +38,20 @@ class PostListView(ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    # Swagger 요청 및 응답 스키마 정의
-    post_create_request_schema = openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'title': openapi.Schema(type=openapi.TYPE_STRING, description='게시글 제목'),
-            'content': openapi.Schema(type=openapi.TYPE_STRING, description='게시글 내용'),
-            'image': openapi.Schema(type=openapi.TYPE_STRING, format='binary', description='첨부 이미지 (선택)'),
-        },
-        required=['title', 'content']
-    )
-
-    post_response_schema = openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'id': openapi.Schema(type=openapi.TYPE_INTEGER, description='게시글 ID'),
-            'author_name': openapi.Schema(type=openapi.TYPE_STRING, description='작성자 이름'),
-            'title': openapi.Schema(type=openapi.TYPE_STRING, description='게시글 제목'),
-            'content': openapi.Schema(type=openapi.TYPE_STRING, description='게시글 내용'),
-            'image': openapi.Schema(type=openapi.TYPE_STRING, description='첨부 이미지 URL'),
-            'created_at': openapi.Schema(type=openapi.TYPE_STRING, format='datetime', description='작성일시'),
-        }
-    )
-
+    # Swagger 데코레이터를 get/post 각각 적용
     @swagger_auto_schema(
         operation_summary="게시글 목록 조회",
         operation_description="특정 게시판의 게시글 목록을 반환합니다.",
         responses={
-            200: openapi.Response(description="성공", schema=openapi.Schema(
+            200: openapi.Response(description="목록 조회 성공", schema=openapi.Schema(
                 type=openapi.TYPE_ARRAY,
                 items=post_response_schema
-            ))
+            )),
         }
     )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
     @swagger_auto_schema(
         operation_summary="게시글 생성",
         operation_description="특정 게시판에 새로운 게시글을 생성합니다.",
@@ -109,14 +114,18 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    # 각각의 HTTP 메서드에 Swagger 데코레이터 적용
     @swagger_auto_schema(
         operation_summary="게시글 상세 조회",
-        operation_description="특정 게시판의 특정 게시글을 조회합니다.",
+        operation_description="특정 게시글의 정보를 조회합니다.",
         responses={
-            200: openapi.Response(description="성공", schema=post_response_schema),
+            200: openapi.Response(description="조회 성공", schema=post_response_schema),
             404: openapi.Response(description="게시글을 찾을 수 없습니다."),
         }
     )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
     @swagger_auto_schema(
         operation_summary="게시글 수정",
         operation_description="특정 게시글의 정보를 수정합니다.",
@@ -127,6 +136,9 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
             404: openapi.Response(description="게시글을 찾을 수 없습니다."),
         }
     )
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
     @swagger_auto_schema(
         operation_summary="게시글 삭제",
         operation_description="특정 게시글을 삭제합니다.",
@@ -146,4 +158,3 @@ class PostDetailView(RetrieveUpdateDestroyAPIView):
             return Post.objects.get(board_id=board_id, id=post_id)
         except Post.DoesNotExist:
             raise Http404("Post not found.")
-
