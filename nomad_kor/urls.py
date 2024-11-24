@@ -14,25 +14,52 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
-from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.urls import path, re_path
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
-# main 앱의 views import
-from main.views.signup import signup_view  # signup 관련 수정
-from main.views.login import LoginView  # Login 관련 수정
+# 인증 및 프로필 관련 뷰
+from main.views.signup import SignupView
+from main.views.login import LoginView
 from main.views.profile import create_profile, ProfileDetailView, ProfileUpdateView
+
+# 게시판 관련 뷰
 from main.views.position import PositionListView, PositionDetailView
 from main.views.ftf import FTFListView, FTFDetailView
 from main.views.anonymous import AnonymousListView, AnonymousDetailView
 from main.views.post import PostListView, PostDetailView
 from main.views.comment import CommentListView, CommentDetailView
+
+# 카페 및 장소 관련 뷰
 from main.views.place import (
     add_rating, NearbyCafeListView, CafeDetailView,
     ReviewListCreateView, ReviewDetailView, find_meeting_place,
-    find_single_user_directions, RatingListView
+    find_single_user_directions, RatingListView,
+)
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Nomad_Kor API Documentation",  # API 문서 제목
+        default_version='v1',  # API 버전
+        description=( #API 문서 설명
+            "Nomad_Kor 프로젝트의 API 문서입니다.\n"
+            "제공하는 기능:\n"
+            "- 회원가입\n"
+            "- 로그인\n"
+            "- 프로필 생성\n"
+            "- 포지션 보드\n"
+            "- 리얼 커넥트\n"
+            "- 익명 보드\n"
+            "- 글 작성\n"
+            "- 댓글 및 대댓글 작성\n"
+        ),
+        terms_of_service="",  # 서비스 약관 URL 생략 (필요시 더미 URL 가능)
+        contact=openapi.Contact(email="chsm7288@naver.com"),  # 본인의 이메일 주소
+        license=openapi.License(name="Custom License"),  # 라이선스 이름
+    ),
+    public=True,
+    permission_classes=([permissions.AllowAny]),
 )
 
 urlpatterns = [
@@ -43,8 +70,12 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
+    # Swagger URLs 추가
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+
     # 인증 및 프로필
-    path('signup/', signup_view, name='signup'),
+    path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('profile/create/', create_profile, name='create_profile'),
     path('profile/', ProfileDetailView.as_view(), name='profile_detail'),
@@ -63,16 +94,16 @@ urlpatterns = [
     path('single-directions/', find_single_user_directions, name='single-directions'),
 
     # Position 게시판
-    path('networking/position/', PositionListView.as_view(), name='position-list-create'),
-    path('networking/position/<int:position_id>/', PositionDetailView.as_view(), name='position-detail'),
+    path('network/position/', PositionListView.as_view(), name='position-list'),
+    path('network/position/<int:position_id>/', PositionDetailView.as_view(), name='position-detail'),
     # Position 게시판의 게시글
-    path('networking/position/<int:position_id>/posts/', PostListView.as_view(), name='position-post-list'),
-    path('networking/position/<int:position_id>/posts/<int:pk>/', PostDetailView.as_view(), name='position-post-detail'),
+    path('network/position/<int:position_id>/posts/', PostListView.as_view(), name='position-post-list'),
+    path('network/position/<int:position_id>/posts/<int:pk>/', PostDetailView.as_view(), name='position-post-detail'),
     # Position 게시판 댓글
     # 게시글에 대한 댓글을 작성하기 위한 URL
-    path('networking/position/<int:position_id>/posts/<int:post_id>/comments/', CommentListView.as_view(),
+    path('network/position/<int:position_id>/posts/<int:post_id>/comments/', CommentListView.as_view(),
          name='position-comment-list'),
-    path('networking/position/<int:position_id>/posts/<int:post_id>/comments/<int:pk>/', CommentDetailView.as_view(),
+    path('network/position/<int:position_id>/posts/<int:post_id>/comments/<int:pk>/', CommentDetailView.as_view(),
          name='position-comment-detail'),
 
     # FTF 게시판

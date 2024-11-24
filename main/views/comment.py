@@ -1,25 +1,10 @@
 from rest_framework import generics
-from rest_framework.permissions import BasePermission, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import ValidationError
-from ..models import Post, Comment
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from ..serializers.comment import CommentSerializer
-from django.http import Http404
-from django.core.cache import cache
-from django.core.cache import cache
-class IsAuthorOrPostAuthorPermission(BasePermission):
-    """
-    댓글 작성자만 댓글 수정 및 삭제 가능. 비밀 댓글/대댓글은 게시글 작성자와 댓글 작성자만 볼 수 있음.
-    """
-    def has_object_permission(self, request, view, obj):
-        # 수정 및 삭제 권한: 댓글 작성자나 게시글 작성자
-        if request.method in ['PUT', 'PATCH', 'DELETE']:
-            return obj.author == request.user.profile or obj.post.author == request.user.profile
-
-        # 조회 권한: 비밀 댓글은 게시글 작성자와 댓글 작성자만 조회 가능
-        if obj.is_private:
-            return obj.author == request.user.profile or obj.post.author == request.user.profile
-
-        return True
+from ..models import Post, Comment
 
 class CommentListView(generics.ListCreateAPIView):
     """
@@ -28,14 +13,57 @@ class CommentListView(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    # Swagger 요청 및 응답 스키마 정의
+    comment_create_request_schema = openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'content': openapi.Schema(type=openapi.TYPE_STRING, description='댓글 내용'),
+            'is_private': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='비밀 댓글 여부', default=False),
+            'parent': openapi.Schema(type=openapi.TYPE_INTEGER, description='대댓글의 부모 댓글 ID', nullable=True),
+        },
+        required=['content']
+    )
+
+    comment_response_schema = openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'id': openapi.Schema(type=openapi.TYPE_INTEGER, description='댓글 ID'),
+            'author_name': openapi.Schema(type=openapi.TYPE_STRING, description='작성자 이름'),
+            'content': openapi.Schema(type=openapi.TYPE_STRING, description='댓글 내용'),
+            'is_private': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='비밀 댓글 여부'),
+            'created_at': openapi.Schema(type=openapi.TYPE_STRING, format='datetime', description='작성일시'),
+            'parent': openapi.Schema(type=openapi.TYPE_INTEGER, description='부모 댓글 ID', nullable=True),
+        }
+    )
+
+    @swagger_auto_schema(
+        operation_summary="댓글 목록 조회",
+        operation_description="특정 게시판의 특정 게시글에 대한 댓글 목록을 반환합니다.",
+        responses={
+            200: openapi.Response(description="성공", schema=openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=comment_response_schema
+            ))
+        }
+    )
+    @swagger_auto_schema(
+        operation_summary="댓글 생성",
+        operation_description="특정 게시판의 특정 게시글에 댓글을 생성합니다.",
+        request_body=comment_create_request_schema,
+        responses={
+            201: openapi.Response(description="댓글 생성 성공", schema=comment_response_schema),
+            400: openapi.Response(description="잘못된 요청"),
+        }
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
     def get_queryset(self):
-        # URL에서 position_id, ftf_id, anonymous_id, post_id 가져오기
         position_id = self.kwargs.get('position_id')
         ftf_id = self.kwargs.get('ftf_id')
         anonymous_id = self.kwargs.get('anonymous_id')
         post_id = self.kwargs.get('post_id')
 
-        # 각 게시판에서의 Post를 필터링
         if position_id:
             try:
                 post = Post.objects.get(position_id=position_id, id=post_id)
@@ -65,21 +93,16 @@ class CommentListView(generics.ListCreateAPIView):
         anonymous_id = self.kwargs.get('anonymous_id')
         post_id = self.kwargs.get('post_id')
 
-        # 비밀 댓글 여부 확인 (기본값은 False)
         is_private = self.request.data.get('is_private', False)
-
-        # parent 필드를 확인하여 대댓글인지 판단
         parent_id = self.request.data.get('parent', None)
         parent = None
 
-        if parent_id:  # 대댓글인 경우
+        if parent_id:
             try:
                 parent = Comment.objects.get(id=parent_id)
             except Comment.DoesNotExist:
                 raise ValidationError({"parent": f"Parent comment with ID {parent_id} not found."})
-            # 작성자가 is_private를 선택할 수 있으므로 기본 설정 제거
 
-        # 게시글 찾기
         if position_id:
             try:
                 post = Post.objects.get(position_id=position_id, id=post_id)
@@ -98,28 +121,8 @@ class CommentListView(generics.ListCreateAPIView):
         else:
             raise ValidationError({"error": "Invalid board type in URL."})
 
-        # 익명 게시판인 경우
-        if 'anonymous' in self.request.path:
-            # 캐시를 사용하여 프로필별 익명 번호 관리
-            user_profile = self.request.user.profile
-            author_name = cache.get(f"anonymous_name_{user_profile.id}")
-
-            if not author_name:
-                # 새로운 익명 번호 생성
-                max_anonymous_number = cache.get("max_anonymous_number", 0) + 1
-                cache.set("max_anonymous_number", max_anonymous_number)
-                author_name = f"익명{max_anonymous_number}"
-                cache.set(f"anonymous_name_{user_profile.id}", author_name)
-
-            # 글 작성자는 특별히 "익명(작성자)"으로 설정
-            if post.author == user_profile:
-                author_name = "익명(작성자)"
-        else:
-            author_name = self.request.user.profile.nickname  # 프로필의 nickname 사용
-
-        # 댓글 저장
-        serializer.save(post=post, author=self.request.user.profile, author_name=author_name,
-                        is_private=is_private, parent=parent)
+        author_name = self.request.user.profile.nickname
+        serializer.save(post=post, author=self.request.user.profile, author_name=author_name, is_private=is_private, parent=parent)
 
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -127,7 +130,36 @@ class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     댓글 상세 조회, 수정 및 삭제
     """
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrPostAuthorPermission]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    @swagger_auto_schema(
+        operation_summary="댓글 상세 조회",
+        operation_description="특정 댓글의 상세 정보를 반환합니다.",
+        responses={
+            200: openapi.Response(description="성공", schema=comment_response_schema),
+            404: openapi.Response(description="댓글을 찾을 수 없습니다."),
+        }
+    )
+    @swagger_auto_schema(
+        operation_summary="댓글 수정",
+        operation_description="특정 댓글의 내용을 수정합니다.",
+        request_body=comment_create_request_schema,
+        responses={
+            200: openapi.Response(description="수정 성공", schema=comment_response_schema),
+            400: openapi.Response(description="잘못된 요청"),
+            404: openapi.Response(description="댓글을 찾을 수 없습니다."),
+        }
+    )
+    @swagger_auto_schema(
+        operation_summary="댓글 삭제",
+        operation_description="특정 댓글을 삭제합니다.",
+        responses={
+            204: openapi.Response(description="삭제 성공"),
+            404: openapi.Response(description="댓글을 찾을 수 없습니다."),
+        }
+    )
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
 
     def get_object(self):
         position_id = self.kwargs.get('position_id')
@@ -136,7 +168,6 @@ class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
         post_id = self.kwargs.get('post_id')
         comment_id = self.kwargs.get('pk')
 
-        # Position, FTF, Anonymous board에서의 Post를 필터링
         if position_id:
             try:
                 post = Post.objects.get(position_id=position_id, id=post_id)
