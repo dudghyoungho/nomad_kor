@@ -38,29 +38,17 @@ from main.views.comment import CommentListView, CommentDetailView
 # 카페 및 장소 관련 뷰
 from main.views.place import (
     add_rating, NearbyCafeListView, CafeDetailView,
-    ReviewListCreateView, ReviewDetailView, find_meeting_place,
-    find_single_user_directions, RatingListView,
+    ReviewListCreateView, ReviewDetailView, RatingListView,
 )
+#길찾기 관련 뷰
+from main.views.direction import find_meeting_place, find_single_user_direction
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Nomad_Kor API Documentation",  # API 문서 제목
-        default_version='v1',  # API 버전
-        description=( #API 문서 설명
-            "Nomad_Kor 프로젝트의 API 문서입니다.\n"
-            "제공하는 기능:\n"
-            "- 회원가입\n"
-            "- 로그인\n"
-            "- 프로필 생성\n"
-            "- 포지션 보드\n"
-            "- 리얼 커넥트\n"
-            "- 익명 보드\n"
-            "- 글 작성\n"
-            "- 댓글 및 대댓글 작성\n"
-        ),
-        terms_of_service="",  # 서비스 약관 URL 생략 (필요시 더미 URL 가능)
-        contact=openapi.Contact(email="chsm7288@naver.com"),  # 본인의 이메일 주소
-        license=openapi.License(name="Custom License"),  # 라이선스 이름
+        title="Nomad_Kor API",
+        default_version='v1',
+        description="Nomad_Kor 프로젝트의 API 문서",
+        contact=openapi.Contact(email="chsm7288@naver.com"),
     ),
     public=True,
     permission_classes=([permissions.AllowAny]),
@@ -94,8 +82,8 @@ urlpatterns = [
     path('reviews/<int:pk>/', ReviewDetailView.as_view(), name='review-detail'),
 
     # 길찾기
-    path('meeting-place/', find_meeting_place, name='find-meeting-place'),
-    path('single-directions/', find_single_user_directions, name='single-directions'),
+    path('directions/meeting/', find_meeting_place, name='find-meeting-place'),
+    path('directions/single/', find_single_user_direction, name='find-single-user-direction'),
 
     # Position 게시판
     path('network/position/', PositionListView.as_view(), name='position-list'),
