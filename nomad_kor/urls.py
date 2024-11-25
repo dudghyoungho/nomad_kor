@@ -36,12 +36,12 @@ from main.views.post import PostListView, PostDetailView
 from main.views.comment import CommentListView, CommentDetailView
 
 # 카페 및 장소 관련 뷰
-from main.views.place import (
-    NearbyCafeListView, CafeDetailView, RatingListView, RatingDetailView,
-    ReviewListView, ReviewDetailView
-)
+from main.views.cafe import NearbyCafeListView, NearbyCafeDetailView
+from main.views.rating import RatingListView, RatingDetailView
+from main.views.review import ReviewListView, ReviewDetailView
+
 #길찾기 관련 뷰
-from main.views.direction import find_meeting_place, find_single_user_direction
+from main.views.direction import find_meeting_cafe, find_single_user_direction
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -76,20 +76,18 @@ urlpatterns = [
     path('profile/update/', ProfileUpdateView.as_view(), name='profile_update'),
 
     # 카페 관련
-    path('places/nearby/', NearbyCafeListView.as_view(), name='nearby-cafes'),  # 주변 카페 목록 조회
-    path('places/<int:cafe_id>/', CafeDetailView.as_view(), name='cafe-detail'),  # 카페 상세 조회
+    path('cafes/nearby/', NearbyCafeListView.as_view(), name='nearby-cafes'),  # 주변 카페 목록 조회
+    path('cafes/nearby/<int:cafe_id>/', NearbyCafeDetailView.as_view(), name='nearby-cafe-detail'),  # 카페 상세 조회
 
-    #별점 관련
-    path('places/<int:cafe_id>/rating/', RatingListView.as_view(), name='add-rating-and-average-rating'),
-    # 별점 추가 및 평균 별점 조회
-    path('places/<int:cafe_id>/ratings/<int:pk>/', RatingDetailView.as_view(), name='rating-detail'),  # 별점 수정 및 삭제
-
-    # 리뷰 관련
-    path('places/<int:cafe_id>/reviews/', ReviewListView.as_view(), name='review-list-create'),  # 리뷰 목록 조회 및 작성
-    path('reviews/<int:pk>/', ReviewDetailView.as_view(), name='review-detail'),  # 리뷰 상세 조회 및 수정
+    path('cafes/<int:cafe_id>/ratings/', RatingListView.as_view(), name='rating-list'),  # 특정 카페의 별점 목록 조회 및 추가
+    path('cafes/<int:cafe_id>/ratings/<int:pk>/', RatingDetailView.as_view(), name='rating-detail'),
+    # 특정 카페의 개별 별점 수정 및 삭제
+    path('cafes/<int:cafe_id>/reviews/', ReviewListView.as_view(), name='review-list'),  # 특정 카페의 리뷰 목록 조회 및 작성
+    path('cafes/<int:cafe_id>/reviews/<int:pk>/', ReviewDetailView.as_view(), name='review-detail'),
+    # 특정 카페의 개별 리뷰 수정 및 삭제
 
     # 길찾기
-    path('directions/meeting/', find_meeting_place, name='find-meeting-place'),
+    path('directions/meeting/', find_meeting_cafe, name='find-meeting-cafe'),
     path('directions/single/', find_single_user_direction, name='find-single-user-direction'),
 
     # Position 게시판

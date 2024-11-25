@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from ..models.place import Place
+from ..models.cafe import Cafe
 
-class PlaceSerializer(serializers.ModelSerializer):
+class CafeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Place
+        model = Cafe
         fields = [
             'branch',       # 지점 이름
             'name',         # 장소 이름

@@ -1,6 +1,6 @@
 from django.db import models
 
-class Place(models.Model):
+class Cafe(models.Model):
     branch = models.CharField(max_length=100, blank=True, null=True)  # 지점 (예: "서울 강남점")
     name = models.CharField(max_length=200)  # 장소 이름
     address = models.CharField(max_length=300, blank=True, null=True)  # 장소 주소

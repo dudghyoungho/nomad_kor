@@ -1,6 +1,6 @@
 from .position import PositionSerializer
 from .comment import CommentSerializer
-from .place import PlaceSerializer
+from .cafe import CafeSerializer
 from .post import PostSerializer
 from .profile import ProfileSerializer
 from .rating import RatingSerializer

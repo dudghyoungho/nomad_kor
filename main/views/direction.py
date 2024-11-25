@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from ..models.place import Place
+from ..models.cafe import Cafe
 from ..services import NaverMapService
 
 
@@ -34,7 +34,7 @@ from ..services import NaverMapService
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticatedOrReadOnly])
-def find_meeting_place(request):
+def find_meeting_cafe(request):
     """
     두 사용자의 좌표를 받아 중간 지점 근처 지하철역 검색 및 네이버 길찾기 URL 반환
     """
@@ -50,10 +50,10 @@ def find_meeting_place(request):
 
         naver_service = NaverMapService(client_id="your_client_id", client_secret="your_client_secret")
 
-        cafe_user1 = Place.objects.get(id=cafe_id_user1)
+        cafe_user1 = Cafe.objects.get(id=cafe_id_user1)
         user1_to_cafe_url = naver_service.get_directions_for_user_and_place(user1_lat, user1_lon, cafe_user1.latitude, cafe_user1.longitude)
 
-        cafe_user2 = Place.objects.get(id=cafe_id_user2)
+        cafe_user2 = Cafe.objects.get(id=cafe_id_user2)
         user2_to_cafe_url = naver_service.get_directions_for_user_and_place(user2_lat, user2_lon, cafe_user2.latitude, cafe_user2.longitude)
 
         return Response({
@@ -63,7 +63,7 @@ def find_meeting_place(request):
 
     except KeyError as e:
         return Response({"error": f"'{e.args[0]}' 필드가 누락되었습니다."}, status=400)
-    except Place.DoesNotExist:
+    except Cafe.DoesNotExist:
         return Response({"error": "선택한 카페를 찾을 수 없습니다."}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
@@ -105,7 +105,7 @@ def find_single_user_direction(request):
 
         naver_service = NaverMapService(client_id="your_client_id", client_secret="your_client_secret")
 
-        cafe = Place.objects.get(id=cafe_id)
+        cafe = Cafe.objects.get(id=cafe_id)
         directions_url = naver_service.get_directions_for_user_and_place(user_lat, user_lon, cafe.latitude, cafe.longitude)
 
         return Response({
@@ -114,7 +114,7 @@ def find_single_user_direction(request):
 
     except KeyError as e:
         return Response({"error": f"'{e.args[0]}' 필드가 누락되었습니다."}, status=400)
-    except Place.DoesNotExist:
+    except Cafe.DoesNotExist:
         return Response({"error": "선택한 카페를 찾을 수 없습니다."}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
