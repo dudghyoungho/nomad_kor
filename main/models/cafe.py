@@ -4,8 +4,7 @@ from django.utils.timezone import now
 
 
 class Cafe(models.Model):
-    branch = models.CharField(max_length=100, blank=True, null=True)  # 지점 (예: "서울 강남점")
-    name = models.CharField(max_length=200)  # 장소 이름
+    name = models.CharField(max_length=300)  # 장소 이름 (지점 + 이름 통합)
     address = models.CharField(max_length=300, blank=True, null=True)  # 장소 주소
     latitude = models.FloatField()  # 위도
     longitude = models.FloatField()  # 경도
@@ -37,5 +36,9 @@ class Cafe(models.Model):
                 return "영업 종료"
         except ValueError:
             return "영업 시간 정보를 제공해주지 않는 카페입니다."  # 잘못된 형식의 영업 시간도 처리
+
+    def __str__(self):
+        return self.name
+
 
 
