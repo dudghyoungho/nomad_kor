@@ -9,7 +9,6 @@ from drf_yasg import openapi
 from ..models.cafe import Cafe
 from ..models.profile import Profile
 from ..serializers.cafe import CafeSerializer
-
 from ..services import NaverMapService
 
 
