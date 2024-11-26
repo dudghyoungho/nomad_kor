@@ -26,6 +26,7 @@ from django.conf.urls.static import static
 # 인증 및 프로필 관련 뷰
 from main.views.signup import SignupView
 from main.views.login import LoginView
+from main.views.logout import LogoutView
 from main.views.profile import create_profile, ProfileDetailView, ProfileUpdateView
 
 # 게시판 관련 뷰
@@ -71,6 +72,7 @@ urlpatterns = [
     # 인증 및 프로필
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('profile/create/', create_profile, name='create_profile'),
     path('profile/', ProfileDetailView.as_view(), name='profile_detail'),
     path('profile/update/', ProfileUpdateView.as_view(), name='profile_update'),

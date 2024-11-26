@@ -1,6 +1,7 @@
 from .position import PositionListView, PositionDetailView
 from .comment import CommentDetailView, CommentListView
 from .login import LoginView
+from .logout import LogoutView
 from .cafe import NearbyCafeListView, NearbyCafeDetailView
 from .rating import RatingListView, RatingDetailView
 from .review import ReviewListView, ReviewDetailView

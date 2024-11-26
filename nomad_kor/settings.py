@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     'main',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
 ]
 
@@ -145,6 +146,15 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
+# SimpleJWT 설정
+SIMPLE_JWT = {
+    'ROTATE_REFRESH_TOKENS': True,  # 리프레시 토큰 회전
+    'BLACKLIST_AFTER_ROTATION': True,  # 리프레시 토큰 회전 후 블랙리스트 처리
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'username',
+    'USER_ID_CLAIM': 'user_id',
+}
+
 #Swagger UI에 JWT 입력 필드 추가
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
