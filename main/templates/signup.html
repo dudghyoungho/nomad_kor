@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+      body {
+        font-family: "Nanum Gothic Coding", monospace;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .signup-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+      }
+
+      .signup-container h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: bold;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .signup-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .signup-button:hover {
+        background-color: #45a049;
+      }
+
+      .back-link {
+        display: block;
+        margin-top: 15px;
+        text-decoration: none;
+        color: #333;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 14px;
+        margin-bottom: 10px;
+        display: none; /* Hidden by default */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="signup-container">
+      <h2>회원가입</h2>
+      <form id="signupForm">
+        <div class="form-group">
+          <label for="username">아이디</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="아이디를 입력하세요"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="비밀번호를 입력하세요"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">비밀번호 확인</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="비밀번호를 다시 입력하세요"
+            required
+          />
+        </div>
+        <div class="error-message" id="errorMessage">
+          비밀번호가 일치하지 않습니다.
+        </div>
+        <button type="submit" class="signup-button">회원가입</button>
+      </form>
+      <a href="index.html" class="back-link">뒤로가기</a>
+    </div>
+
+    <script>
+        // signup.html 내 JavaScript 코드
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+  if (password !== confirmPassword) {
+    alert('비밀번호가 일치하지 않습니다.');
+    return;
+  }
+
+  try {
+    const response = await fetch('signup/', {  // Django API endpoint
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        password_confirm: confirmPassword,
+      }),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert('회원가입 성공!');
+      window.location.href = '/';  // 로그인 페이지로 리디렉션
+    } else {
+      alert(result.error || '회원가입 실패!');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('서버 오류가 발생했습니다.');
+  }
+});
+
+    </script>
+  </body>
+</html>
