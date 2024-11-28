@@ -23,6 +23,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import render
+from main.views import index, signup
 
 # 인증 및 프로필 관련 뷰
 from main.views.signup import SignupView
@@ -38,14 +39,13 @@ from main.views.post import PostListView, PostDetailView
 from main.views.comment import CommentListView, CommentDetailView
 
 # 카페 및 장소 관련 뷰
-from main.views import map_view, signup
+from main.views import map_view
 from main.views.cafe import NearbyCafeListView, NearbyCafeDetailView, MidpointCafeListView
 from main.views.rating import RatingListView, RatingDetailView
 from main.views.review import ReviewListView, ReviewDetailView
 
 #길찾기 관련 뷰
 from main.views.direction import find_meeting_cafe, find_single_user_direction
-from main.views.signuphtml import signup_view
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -73,10 +73,8 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
     #초기 화면
-    path('', lambda request: render(request, 'index.html'), name='index'),  # 로그인 페이지
-    path('signup/', lambda request: render(request, 'signup.html'), name='signup'),  # 회원가입 페이지
-
-
+    path('', index, name='index'),  # 로그인 화면
+    path('signup/', signup, name='signup'),  # 회원가입 화면
 
 
 
@@ -129,7 +127,7 @@ urlpatterns = [
 
     # 익명 게시판
     path('network/anonymous/', AnonymousListView.as_view(), name='anonymous-list'),
-    path('network/anonymous/<int:anonymous_id>/', AnonymousDetailView.as_view(), name='anonymous-detail'),
+    path('network/anonymous/<int:pk>/', AnonymousDetailView.as_view(), name='anonymous-detail'),
     path('network/anonymous/<int:anonymous_id>/posts/', PostListView.as_view(), name='anonymous-post-list'),
     path('network/anonymous/<int:anonymous_id>/posts/<int:pk>/', PostDetailView.as_view(), name='anonymous-post-detail'),
     path('network/anonymous/<int:anonymous_id>/posts/<int:post_id>/comments/', CommentListView.as_view(), name='anonymous-comment-list'),

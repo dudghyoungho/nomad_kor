@@ -52,52 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const signupBtn = document.getElementById("signupBtn");
-  const cancelSignupBtn = document.getElementById("cancelSignupBtn");
-  const loginForm = document.getElementById("login-form");
-  const signupForm = document.getElementById("signup-form");
-  const loginTitle = document.getElementById("login-title");
-  const loginDescription = document.getElementById("login-description");
-
-  // 회원가입 폼 표시
-  signupBtn.addEventListener("click", () => {
-    loginForm.classList.add("hidden");
-    signupForm.classList.remove("hidden");
-    loginTitle.textContent = "회원가입";
-    loginDescription.textContent = "서비스 이용을 위해 정보를 입력하세요 :)";
-  });
-
-  // 회원가입 취소 시 로그인 화면으로 복귀
-  cancelSignupBtn.addEventListener("click", () => {
-    signupForm.classList.add("hidden");
-    loginForm.classList.remove("hidden");
-    loginTitle.textContent = "로그인";
-    loginDescription.textContent = "서비스 이용을 위해 로그인 해 주세요 :)";
-  });
-
-  // 회원가입 폼 제출 처리
-  signupForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const username = document.getElementById("signup-name").value.trim();
-    const password = document.getElementById("signup-password").value.trim();
-
-    if (!username || !password) {
-      alert("아이디와 비밀번호를 모두 입력해주세요.");
-      return;
-    }
-
-    // 서버로 회원가입 요청 전송 (임시 메시지로 처리)
-    alert(`회원가입 완료! 아이디: ${username}, 비밀번호: ${password}`);
-
-    // 회원가입 완료 후 로그인 화면으로 복귀
-    signupForm.classList.add("hidden");
-    loginForm.classList.remove("hidden");
-    loginTitle.textContent = "로그인";
-    loginDescription.textContent = "서비스 이용을 위해 로그인 해 주세요 :)";
-  });
-});
 
 
 
@@ -179,4 +133,3 @@ if (post) {
     <p>게시글을 찾을 수 없습니다. <a href="index.html">메인 페이지로 돌아가기</a></p>
   `;
 }
-

@@ -12,5 +12,5 @@ from .ftf import FTFListView, FTFDetailView
 from .anonymous import AnonymousListView, AnonymousDetailView
 
 from .map import map_view
-
-__all__ = ["map_view"]
+from .index_views import index
+from .signup_views import signup
