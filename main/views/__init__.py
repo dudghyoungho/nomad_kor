@@ -10,3 +10,7 @@ from .post import PostListView, PostDetailView
 from .signup import SignupView
 from .ftf import FTFListView, FTFDetailView
 from .anonymous import AnonymousListView, AnonymousDetailView
+
+from .map import map_view
+
+__all__ = ["map_view"]

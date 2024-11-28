@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NomaCircle</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qqfuv0gqve"></script>
+</head>
+<body>
+    <!-- 사이드바 -->
+    <div class="sidebar" style="position: fixed;">
+        <!-- Sidebar 내용 -->
+    </div>
+
+    <!-- Workplace Search -->
+    <div class="workplace-search" style="position: fixed;">
+        <div class="wp-search-window">
+            <div class="wp-search-bar">
+                <img src="{% static 'main/assets/searching.png' %}" class="WP-Search" />
+                <input class="wp-search-input" placeholder="근처의 워크플레이스를 검색해보세요." />
+            </div>
+            <div class="wp-search-result">
+                <!-- JSON 데이터를 기반으로 동적으로 카페 목록이 삽입됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 지도 -->
+    <div class="map-content" style="z-index: -1;">
+        <div id="map"></div>
+    </div>
+
+    <script src="{% static 'main/js/map.js' %}"></script>
+</body>
+</html>

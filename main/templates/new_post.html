@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NomaCircle</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Tamil&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../../../../Downloads/Hurdlethon2024_team_project_front/styles.css">
+
+  <style>
+    body {
+      font-family: 'Gowun Dodum', sans-serif; /* 폰트와 대체 폰트 설정 */
+    }
+  
+    a {
+        text-decoration: none; /* 기본 밑줄 제거 */
+        position: relative;
+    }
+  </style>
+  
+</head>
+<body>
+
+    <div class="sidebar" style="position: fixed;" >
+        <ul>
+            <li>
+                <a href = "profile.html#profileScreen">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/profile-icon-white.png" alt="Profile">
+                </a>
+            </li>
+            <li>
+                <a href = "index.html#mainScreen">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/home-icon-white.png" alt="Home">
+                </a>
+            </li>
+            <li>
+                <a href="map.html">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/map-icon-white.png" alt="Map">
+                </a>
+            </li>
+            <li>
+                <a href="networking.html">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/chat-icon-white.png" alt="Chat">
+                </a>
+            </li>
+            <li>
+                <div class="whitelogo-sidebar">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/onlylogowhite2.png" alt="Logo">
+                </div>
+            </li>
+        </ul>
+    </div>
+
+  <div class="nonameboardScreen">
+      <div class="nonameboard-title">
+        <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/익명보드.png" alt="Emoji">
+        <h1>익명보드</h1>
+      </div>
+
+
+      <div class="create-post-container">
+        <h1>게시글 작성</h1>
+        <form action="/submit_post" method="POST">
+          <label for="post-title">제목</label>
+          <input type="text" id="post-title" name="title" required>
+    
+          <label for="post-content">내용</label>
+          <textarea id="post-content" name="content" rows="10" required></textarea>
+    
+          <button type="submit" class="submit-button">작성 완료</button>
+        </form>
+        <button onclick="window.history.back()" class="cancel-button">취소</button>
+      </div>
+
+  </div>
+
+
+  
+
+
+  <script src="../../../../../Downloads/Hurdlethon2024_team_project_front/app.js"></script>
+</body>
+</html>

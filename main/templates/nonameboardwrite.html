@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NomaCircle</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Tamil&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../../../../Downloads/Hurdlethon2024_team_project_front/styles.css">
+
+  <style>
+    body {
+      font-family: 'Gowun Dodum', sans-serif;
+      background: url('../../../../../Downloads/Hurdlethon2024_team_project_front/assets/background2.png') no-repeat center center/cover;
+      height: 100vh;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     background-size: cover; /* 이미지가 화면을 덮도록 설정 */
+}
+
+    .board-container {
+      position: absolute;
+      top: 15%; /* 아래로 약간 내리기 */
+      left: 10%;
+      width: 85%;
+      height:750px;
+      max-width: 5000px;
+      max-height:3500px;
+      background-color: rgba(0, 0, 0, 0.6); /* 투명 배경 */
+      align-items:center;
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 그림자 */
+      margin-right:240px;
+    }
+
+    .board-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      font-family: 'Gowun Dodum';
+    }
+
+    .board-input {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      font-family: 'Gowun Dodum';
+    }
+
+    .board-input textarea {
+      width: 100%;
+      height: 530px;
+      border: none;
+      border-radius: 15px;
+      background-color: rgba(255, 255, 255, 0.1);
+      font-size: 26px;
+      text-align: center;
+      color: white; /* 텍스트 색상 */
+
+      font-family:'Gowun Dodum';
+      padding: 15px;
+      resize: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .board-input textarea::placeholder1 {
+      color: rgba(255, 255, 255, 0.6); /* 플레이스홀더 색상 */
+      font-family:'Gowun Dodum';
+    }
+
+    
+    .board-input textarea::placeholder2 {
+      color: rgba(255, 255, 255, 0.6); /* 플레이스홀더 색상 */
+      font-family:'Gowun Dodum';
+    }
+
+    .board-submit {
+      display: flex;
+      justify-content: flex-end;
+      font-family:'Gowun Dodum';
+
+    }
+
+    .board-submit button {
+      padding: 10px 20px;
+      font-size: 26px;
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-family:'Gowun Dodum';
+      margin-top:20px;
+    }
+
+    .board-submit button:hover {
+      background-color: #4c4caa;
+    }
+
+
+    .board-title input {
+  width: 100%; /* 제목 필드 너비 */
+  height: 50px; /* 높이 조정 */
+  border: none; /* 테두리 제거 */
+  background-color: rgba(255, 255, 255, 0.0001); /* 투명 배경 */
+  font-size: 36px; /* 글씨 크기 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  color: white; /* 텍스트 색상 */
+  font-family: 'Gowun Dodum', sans-serif; /* 글꼴 */
+  padding: 10px; /* 내부 여백 */
+  border-bottom: 1.2px solid #fff;
+  text-align:left;
+  margin-top:10px;
+  margin-bottom:10px;
+  padding-bottom:30px;
+
+}
+
+.board-title input::placeholder {
+  color: rgba(255, 255, 255, 0.6); /* 플레이스홀더 색상 */
+}
+
+
+
+    a {
+        text-decoration: none; /* 기본 밑줄 제거 */
+        position: relative;
+    }
+  </style>
+  
+</head>
+<body>
+
+    <div class="sidebar" style="position: fixed;" >
+        <ul>
+            <li>
+                <a href = "profile.html#profileScreen">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/profile-icon-white.png" alt="Profile">
+                </a>
+            </li>
+            <li>
+                <a href = "index.html#mainScreen">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/home-icon-white.png" alt="Home">
+                </a>
+            </li>
+            <li>
+                <a href="map.html">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/map-icon-white.png" alt="Map">
+                </a>
+            </li>
+            <li>
+                <a href="networking.html">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/chat-icon-white.png" alt="Chat">
+                </a>
+            </li>
+            <li>
+                <div class="whitelogo-sidebar">
+                    <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/onlylogowhite2.png" alt="Logo">
+                </div>
+            </li>
+        </ul>
+    </div>
+
+  <!-- 포지션보드 화면 -->
+  <div class="nonameboardwriteScreen">
+      <div class="nonameboardwrite-title">
+        <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/익명보드.png" alt="Emoji">
+        <h1>익명보드</h1>
+      </div>
+      <div class="horizontal-line1"></div>
+   </div>
+
+   <div class="board-container">
+    <!-- 글 제목 입력 -->
+    <div class="board-title">
+      <input type="text" placeholder="글 제목을 작성해 주세요." />
+    </div>
+    <!-- 본문 입력 -->
+    <div class="board-input">
+      <textarea placeholder="본문을 작성해 주세요."></textarea>
+    </div>
+    <!-- 완료 버튼 -->
+    <div class="board-submit">
+      <button>완료</button>
+    </div>
+  </div>
+  
+
+
+
+
+
+  <script src="../../../../../Downloads/Hurdlethon2024_team_project_front/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1562 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.hidden {
+  display: none;
+}
+
+body {
+  font-family: 'Nanum Gothf Coding', Arial, sans-serif;
+}
+
+/* 공통 스타일 */
+.screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.hidden {
+  display: none; /* 숨겨진 화면 */
+}
+
+/* 첫 화면 스타일 */
+#logoScreen {
+  background: url('assets/background2.png') no-repeat center center/cover;
+  height: 100vh;
+  width: 100%;
+  position: relative; /* 부모 컨테이너는 relative */
+}
+
+/* 모든 디지털 노마드의 ~~ */
+#logoScreen h2 {
+  position: absolute; /* 절대 위치 지정 */
+  left: 545px; /* Figma에서의 X 좌표 */
+  top: 630px; /* Figma에서의 Y 좌표 */
+  transform: translate(-50%, -50%); /* 요소를 중심점 기준으로 조정 */
+  width: 700px; /* Figma에서의 너비 */
+  height: 48px; /* 높이 설정 */
+  font-size: 35px; /* 폰트 크기 */
+  font-family: 'Nanum Gothic Coding', 'Poor Story', sans-serif; /* 폰트 패밀리 */
+  font-weight: 400; /* Regular */
+  color: white;
+  line-height: 1; /* Figma의 줄 간격과 유사하게 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+#logoScreen h1 {
+  position: absolute; /* 절대 위치 지정 */
+  left: 400px; /* Figma에서의 X 좌표 */
+  top: 730px; /* Figma에서의 Y 좌표 */
+  transform: translate(-50%, -50%); /* 요소를 중심점 기준으로 조정 */
+  width: 921px; /* Figma에서의 너비 */
+  height: 134px; /* 높이 설정 */
+  font-size: 130px; /* 폰트 크기 */
+  font-family: 'Anek Tamil', 'Poor Story', sans-serif; /* 폰트 패밀리 */
+  font-weight: 700; /* Regular */
+  color: white;
+  line-height: 1; /* Figma의 줄 간격과 유사하게 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+#logoScreen p {
+  position: absolute; /* 절대 위치 지정 */
+  left: 585px; /* Figma에서의 X 좌표 */
+  top: 730px; /* Figma에서의 Y 좌표 */
+  transform: translate(-50%, -50%); /* 요소를 중심점 기준으로 조정 */
+  width: 921px; /* Figma에서의 너비 */
+  height: 134px; /* 높이 설정 */
+  font-size: 110px; /* 폰트 크기 */
+  font-family: 'Barlow', 'Poor Story', sans-serif; /* 폰트 패밀리 */
+  font-weight: 400; /* Regular */
+  color: white;
+  line-height: 1; /* Figma의 줄 간격과 유사하게 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.logo {
+  position: absolute; /* 자식 요소를 자유롭게 배치 */
+  top: 45%; /* 화면 높이의 50% */
+  left: 43%; /* 화면 너비의 50% */
+  transform: translate(-100%, -70%); /* 가운데 정렬 */
+  width: 43%; /* 로고 크기 조정 */
+}
+
+
+/* 로그인 화면 스타일 */
+#loginScreen {
+  position: relative; /* 부모 컨테이너에 상대 위치 */
+  background: url('assets/background2.png') no-repeat center center/cover;
+  flex-direction: column;
+}
+
+#loginScreen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 30%; /* 로고 크기 조정 */
+  opacity: 0.2; /* 불투명도 설정 */
+  z-index: 1; /* 배경 위에 위치 */
+}
+
+.login-form-container {
+  position: relative;
+  z-index: 2; /* 폼을 로고 위로 올림 */
+}
+
+
+/* 로그인 글자*/
+#loginScreen h2 {
+  position: relative; /* 절대 위치 지정 */
+  left: 680px; /* Figma에서의 X 좌표 */
+  top: -90px; /* Figma에서의 Y 좌표 */
+  transform: translate(-50%, -50%); /* 요소를 중심점 기준으로 조정 */
+  width: 520px; /* Figma에서의 너비 */
+  height: 48px; /* 높이 설정 */
+  font-size: 60px; /* 폰트 크기 */
+  font-family: 'Gowun Dodum', 'Poor Story', sans-serif; /* 폰트 패밀리 */
+  font-weight: 400; /* Regular */
+  color: white;
+  line-height: 1; /* Figma의 줄 간격과 유사하게 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+#loginScreen p {
+  position: relative; /* 절대 위치 지정 */
+  left: 680px; /* Figma에서의 X 좌표 */
+  top: -40px; /* Figma에서의 Y 좌표 */
+  transform: translate(-50%, -50%); /* 요소를 중심점 기준으로 조정 */
+  width: 520px; /* Figma에서의 너비 */
+  height: 48px; /* 높이 설정 */
+  font-size: 15px; /* 폰트 크기 */
+  font-family: 'Gowun Dodum', Arial, Arial; /* 폰트 패밀리 */
+  font-weight: 400; /* Regular */
+  color: white; 
+  line-height: 1; /* Figma의 줄 간격과 유사하게 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+/* 로그인 form 스타일 */
+#loginScreen form {
+  display: flex; /* 가로 정렬 */
+  flex-direction: column; /* 기본값 */
+  justify-content: space-between; /* input 간의 간격 조절 */
+  align-items: center; /* 세로 정렬 */
+  gap: 3rem; /* 두 input 박스 사이 간격 */
+  margin-top: 0px;
+  margin-bottom: 0rem; /* 입력칸, 회원가입 버튼과의 간격 */
+}
+
+/* input 박스 스타일 */
+#loginScreen form input {
+  width: 650px; 
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+/* 버튼 컨테이너 */
+.login-button-container {
+  flex-direction: row;
+  display: flex;
+  justify-content: center; /* 버튼들을 가운데 정렬 */
+  gap: 1.3rem; /* 버튼 사이 간격 설정 (0.5rem 또는 px 단위) */
+}
+
+.login-button-container button {
+  flex-direction: column;
+  display: flex;
+  padding: 1.1rem 5.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.login-button-container button[type="submit"] {
+  background-color: #000;
+  color: #fff;
+}
+
+.login-button-container button[type="button"] {
+  background-color: #ddd;
+  color: #000;
+}
+
+
+/* form-group 스타일 */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-right: 2rem; /* 양쪽 input 사이의 간격 조정 */
+}
+
+.form-group label {
+  margin-bottom: 0.5rem; /* label과 input 간의 간격 */
+  font-size: 1rem;
+  color: white;
+}
+
+.input-container {
+  display: flex;
+ flex-direction:row; 
+}
+
+
+/* Hello Users! 화면 */
+#mainScreen {
+  background-color: #ECEEF6; /* 배경색 */
+  background: url('assets/background2.png') no-repeat center center/cover;
+
+  position: relative;
+  width: 100%; /* 화면 전체 너비 */
+  min-height: 100vh; /* 화면 최소 높이 */
+  display: flex;
+  flex-direction: row; /* 사이드바와 콘텐츠를 가로로 배치 */
+  align-items: flex-start; /* 상단 정렬 */
+  padding-bottom: 2rem; /* 하단 여백 추가 */
+}
+
+
+/* 사이드바 스타일 */
+.sidebar {
+  width: 80px;
+  background-color: #3E3F81;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  z-index : 5;
+}
+
+.sidebar ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sidebar ul li img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color : white;
+}
+
+/* 메인 콘텐츠 스타일 */
+.content {
+  position:absolute;
+  flex: 1;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.content h1 { /*Hello Users!*/
+  font-size: 7rem;
+  font-weight:450;
+  color: #D3D5DF;
+  margin-bottom:1rem;
+  margin-top:3.5rem;
+  margin-left:-1rem;
+  font-family:'Gowun Dodum';
+}
+
+
+.content p { /*오직 디지털 노마드를 위한 ~ */
+  font-size: 1.8rem;
+  color: #D3D5DF;
+  line-height: 1.5;
+  text-align: left;
+  font-family : 'Gowun Dodum';
+  margin-bottom: 1rem;
+  margin-left:-1rem;
+  margin-top:-0.6rem;
+}
+
+/* 메뉴 아이템 컨테이너 */
+.menu-container {
+  display: flex;
+  justify-content: center;
+  align-items : center;
+  gap: 11rem;
+  margin-top: 10rem;
+  width:100%;
+}
+
+
+.menu-item { /*장소찾기, 네트워킹 박스*/
+  width: 550px;
+  height: 175px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.9);
+  border-radius: 23px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  padding-left: 3rem; /* 왼쪽에 여백 추가 */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  opacity : 0.8;
+}
+
+
+.menu-item span {
+  font-size: 2rem;
+}
+
+.menu-item p {
+  margin-top: 0.5rem;
+  margin-left:7.5rem;
+  font-size: 2.8rem;
+  font-family: 'Gowun Dodum', 'Poor Story', sans-serif; /* 폰트 패밀리 */
+  color: #333;
+  
+}
+
+.menu-item:hover {
+  transform: translateY(5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+/* 네트워킹 이미지 위치 및 크기 조절 */
+.networking-image {
+  position: absolute; /* 자유로운 위치 조정을 위해 */
+  top: 20%; /* 상단에서 20% 위치 */
+  left: 60%; /* 왼쪽에서 60% 위치 */
+  width: 100px; /* 이미지 크기 설정 */
+  height: auto; /* 비율 유지 */
+}
+
+/* 장소찾기 이미지 위치 및 크기 조절 (필요하면 추가) */
+.place-image {
+  position: absolute; /* 위치 조정 가능 */
+  top: 20%; /* 상단에서 20% */
+  left: 200rem; /* 왼쪽에서 40% */
+  width: 100px; /* 이미지 크기 */
+  height: auto;
+}
+
+
+.whitelogo-image img {
+  position: absolute; /* 부모를 기준으로 절대 위치 조정 */
+  display: block;
+  width: 200px !important;
+  height: 180px !important;
+  margin-left : -52rem;
+  margin-top:40rem;
+}
+
+
+
+.whitelogo-sidebar img {
+  position: relative; /* 부모를 기준으로 절대 위치 조정 */
+  display: block;
+  width: 150px !important;
+  height: 120px !important;
+  margin-left : 0rem;
+  margin-top:1rem;
+  z-index: 10; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* 전체 화면 배경 스타일 */
+/* Hello User 화면의 배경색 설정 */
+#mainScreen {
+  background-color: #ECEEF6; /* 배경색을 설정 */
+  position: relative;
+  width: 100%;
+  height: 100vh; /* 화면 전체 높이 사용 */
+  display: flex;
+  flex-direction: row;
+}
+
+
+/* 사이드바 스타일 */
+.sidebar {
+  top: 0;
+  left: 0;
+  height: 100vh; /* 화면 전체 높이 */
+  width: 100px; /* 사이드바 너비 */
+  background-color: #3E3F81; /* 배경색 */
+  display: flex;
+  flex-direction: column; /* 아이템을 세로 정렬 */
+  align-items: center; /* 가운데 정렬 */
+  justify-content: space-between; /* 위, 아래로 간격을 띄우기 */
+  padding: 1rem 0; /* 위, 아래 패딩 */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* 약간의 그림자 효과 */
+}
+
+/* 사이드바 아이템 리스트 */
+.sidebar ul {
+  display:flex;
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  height:100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  gap: 3.5rem; /* 아이템 간격 */
+}
+
+/* 사이드바 아이템 */
+.sidebar ul li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* 아이템을 동그랗게 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+  margin-bottom: 1.5rem;
+}
+
+.sidebar ul li img {
+  width: 57px; /* 아이콘 크기 */
+  height: 57px;
+  margin-top:2rem;
+}
+
+/* 하단 고정 로고 */
+.sidebar ul li:last-child {
+  margin-top: auto; /* 마지막 아이템을 맨 아래로 */
+
+  width: 50px !important; /* 아이콘 크기 */
+  height: 50px !important;
+  object-fit: cover;
+}
+
+/* 기본적으로 숨김 처리 */
+body.hidden-scroll {
+  overflow: hidden; /* 스크롤 방지 */
+  height: 100vh; /* 화면 높이를 제한 */
+}
+
+
+body.locked {
+  overflow: hidden;
+}
+
+
+
+
+
+
+
+
+
+.content img {
+  width: 105px;
+  height: 100px;
+  position: absolute;
+  left : 620px;
+  top : 135px;
+  cursor: pointer;
+}
+
+.menu-item img {
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  left : 25px;
+  top : -5px;
+  cursor: pointer;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 4rem;
+  box-sizing: border-box;
+}
+
+/* 폼 제목 스타일 */
+.form-container h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+
+
+
+
+
+
+
+
+
+/* 프로필 화면-----------------------------------------------*/
+
+.profileScreen {
+  background: url('assets/background2.png') no-repeat center center/cover;
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  gap: 30px;
+}
+
+/* 제목 스타일 */
+.profileScreen h1 {
+  text-align: center;
+  font-size: 45px;
+  font-weight: 400;
+  font-family: 'Gowun Dodum', 'Poor Story', sans-serif;
+  margin-bottom: 10px;
+  color: #D6D6D6;
+  margin-left:90px;
+}
+
+/* 프로필 화면에서 입력 받는 칸들 */
+.profileScreen form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* label 간 간격 */
+  width: 650px;
+  padding: 20px;
+}
+
+.profileScreen label {
+  font-size: 32px;
+  color: #D6D6D6;
+  font-family: 'Gowun Dodum', 'Poor Story', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 35px;
+  text-align: left;
+}
+
+.profileScreen input, select {
+  padding: 13px; /*프로필 화면에서 입력받는 칸들의 높이*/
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 0px;
+}
+
+.profileScreen input:focus, select:focus {
+  border-color: #4e4e92;
+  outline: none;
+}
+
+.profileScreen select {
+  cursor: pointer;
+}
+
+.profileScreen img {
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  left : 580px;
+  top : 67px;
+  cursor: pointer;
+}
+
+/* 완료 버튼 스타일 */
+.submit-btn {
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  font-family: 'Gowun Dodum';
+  padding: 16px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 200px; /* 고정 너비 */
+  margin-left:200px;
+  margin-top:50px;
+}
+
+#map { /*지도 api 배치*/
+    position: fixed;
+    margin-left: 100px;
+    top: 0;
+    width: 100%-100px;
+    height: 100vh;
+}
+
+.workplace-search {
+    background-color: rgba(35,35,35,0.43);
+    margin-left: 100px;
+    width: 350px;
+    height: 100vh;
+    z-index: 1;
+}
+
+.wp-search-bar { /*지도 검색창 div*/
+    background-color: #FFFFFF;
+    opacity: 1;
+    margin-top: 20px;
+    margin-left:25px;
+    height:65px;
+    display:flex;
+    align-items:center;
+    border-radius: 12px;
+    width: 300px;
+}
+
+.wp-search-input { /*지도 검색 입력창(input)*/
+    height: 65px;
+    width: 255px;
+    margin-left: 45px;
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    border-width:0;
+}
+
+.WP-Search { /*지도 검색 버튼(돋보기)*/
+    position: absolute;
+    margin-left: 8px;
+    z-index: 2;
+    width: 27px;
+}
+ 
+.wp-search-result { /*검색결과 박스*/
+    background-color: #FFFFFF;
+    opacity: 1;
+    margin-top: 100px;
+    margin-left: 25px;
+    height: 280px;
+    width: 300px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.wp-direction { /*지점명*/
+    color: gray;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+.wp-name { /*카페이름*/
+    font-size: 40px;
+    margin-left: 14px;
+    margin-top: 5px;
+}
+
+.wp-open { /*영업여부*/
+    font-size: 13px;
+    margin-left: 12px;
+    margin-top: 5px;
+}
+
+.wp-image { /*카페 사진*/
+    width: 90px;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+
+.wp-buttons { /*별점, 후기 버튼 div*/
+    width: 280px;
+    height: 35px;
+    margin-left: 15px;
+    margin-top: 10px;
+    display:flex;
+}
+
+
+.wp-stars { /*카페 별점*/
+    background-color: #A6ACB9;
+    width: 160px;
+    height: 35px;
+    margin-top: 5px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    color: white;
+    padding-left: 10px;
+    font-size: 18px;
+}
+.star {
+    background: linear-gradient(to right, #EAB838, #EAB838 50%, #E0E2E7 50%);
+    color: transparent;
+    -webkit-background-clip: text;
+    font-size: 23px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+}
+
+.star-container .star-grade {
+    font-weight: 700;
+}
+.wp-reviews { /*카페 후기들*/
+    background-color: #A6ACB9;
+    width: 100px;
+    height: 35px;
+    margin-left: 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    color: white;
+    padding-left:15px;
+    font-size:20px;
+}
+
+
+
+
+
+/* 네트워킹 스크린 관련 -----------------------------------------------------------*/
+
+
+
+
+.networkingScreen {
+  position:absolute;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: url('assets/background2.png') no-repeat center center/cover;
+  position: relative;
+  width: 100%; /* 화면 전체 너비 */
+  min-height: 100vh; /* 화면 최소 높이 */
+  display: flex;
+  flex-direction: column; /* 사이드바와 콘텐츠를 가로로 배치 */
+  align-items: flex-start; /* 상단 정렬 */
+
+
+}
+
+.networkingScreen h1 { 
+  position:relative;
+  writing-mode: horizontal-tb;
+  transform: none;
+  flex-direction:row !important;
+  font-size: 64px;
+  font-weight:350;
+  color: #D3D5DF;
+  margin-top:-0.8rem;
+  margin-left:14.5rem;
+  font-family:'Gowun Dodum';
+  width:600px;
+}
+
+
+.networkingScreen p { /*오직 디지털 노마드를 위한 ~ */
+  position:relative;
+  font-size: 36px;
+  color: #D3D5DF;
+  line-height: 1.5;
+  text-align: left;
+  font-family : 'Gowun Dodum';
+  margin-bottom: 1rem;
+  margin-left:8rem;
+  margin-top:0.8rem;
+  width:1300px;
+}
+
+.networkingScreen img {
+  width: 105px;
+  height: 100px;
+  position: absolute;
+  left : 140px;
+  top : 35px;
+  cursor: pointer;
+}
+
+/* 메뉴 아이템 컨테이너 */
+.menu-container2 {
+  display: flex;
+  justify-content: center;
+  align-items : center;
+  gap: 5rem;
+  margin-top: 10rem;
+  width:100%;
+}
+
+.menu-item2 { /*포지션보드, 리얼커넥트, 익명보드 박스*/
+  position : relative;
+  width: 397.35px;
+  height: 161px;
+  background-color: #D3D5DF;
+  opacity: 0.73;
+  box-shadow: 7px 10px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.menu-item2 span {
+  font-size: 2rem;
+}
+
+.menu-item2 p {
+  margin-top: 0.5rem;
+  margin-left:5.9rem;
+  font-size: 48px;
+  font-family: 'Gowun Dodum', 'Poor Story', sans-serif; /* 폰트 패밀리 */
+  color: #333;
+  
+}
+
+.menu-item2:hover {
+  transform: translateY(5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+
+.positionboard-image {
+  position: absolute; /* 자유로운 위치 조정을 위해 */
+  top: 0%; /* 상단에서 20% 위치 */
+  left: 40%; /* 왼쪽에서 60% 위치 */
+  width: 47px; /* 이미지 크기 설정 */
+  height: auto; /* 비율 유지 */
+  margin-top:-35px;
+  margin-left:-123px;
+  width: 100px !important;
+  height: 100px !important;
+}
+
+.realconnect-image1 {
+  position: absolute; /* 자유로운 위치 조정을 위해 */
+  margin-top:-43px;
+  margin-left:-125px;
+  width: 90px !important;
+  height: 90px !important;
+}
+
+.realconnect-image2 {
+  position: absolute; /* 자유로운 위치 조정을 위해 */
+  margin-top:-25px;
+  margin-left:-100px;
+  width: 90px !important;
+  height: 90px !important;
+}
+
+.nonameboard-image {
+  position: absolute; /* 위치 조정 가능 */
+  margin-top:-35px;
+  margin-left:-110px;
+  width: 90px !important;
+  height: 90px !important;
+}
+
+
+
+.networkingScreen-sidebar img {
+  position:absolute;
+  height: 1000px;
+  width:150px;
+  top :-6px;
+  left:-30px;
+}
+
+
+
+
+
+
+/* 포지션보드 관련 -----------------------------------------------------------*/
+
+
+.positionboardScreen {
+  position:absolute;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: url('assets/background2.png') no-repeat center center/cover;
+  position: relative;
+  width: 100%; /* 화면 전체 너비 */
+  min-height: 100vh; /* 화면 최소 높이 */
+  display: flex;
+  flex-direction: column; /* 사이드바와 콘텐츠를 가로로 배치 */
+  align-items: flex-start; /* 상단 정렬 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+.positionboardScreen h1 {
+  position: absolute;
+  width: 214px;
+  height: 70px;
+  left: 240px;
+  top: 38px;
+  
+  font-family: 'Gowun Dodum';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 70px;
+  /* identical to box height */
+  
+  color: #D3D5DF;
+}
+
+
+
+
+
+
+.imoji {
+  position:absolute;
+  height: 105px;
+  width:105px;
+  top :20px;
+  left:120px;
+}
+
+.positionboardBackground {
+  position:absolute;
+  height: 800px;
+  width:1700px;
+  top :145px;
+  left:100px;
+  z-index:3;
+}
+
+
+.backend-image {
+position: absolute;
+width: 160px;
+height: 160px;
+left: 175px;
+top: 435px;
+z-index:10;
+}
+
+.frontend-image {
+position: absolute;
+width: 160px;
+height: 160px;
+left: 495px;
+top: 435px;
+z-index:20;
+}
+
+.marketer-image {
+position: absolute;
+width: 135px;
+height: 135px;
+left: 815px;
+top: 444px;
+z-index:10;
+}
+
+.creator-image {
+position: absolute;
+width: 135px;
+height: 135px;
+left: 1135px;
+top: 444px;
+z-index:19;
+}
+
+.changup-image {
+position: absolute;
+width: 135px;
+height: 135px;
+left:1455px;
+z-index:10;
+top: 444px;
+}
+
+
+
+
+.icon-container {
+  display: flex;
+  flex-direction:row;
+  justify-content: space-around; /* 아이콘 간격 균일 */
+  align-items: center;
+  gap: -5rem;
+  margin-top:40rem;
+  z-index:15;
+}
+
+
+
+.icon-item span {
+  position:relative;
+  font-size: 48px;
+  color: #fff; /* 텍스트 하얀색 */
+  font-family: 'Gowun Dodum', sans-serif;
+  margin-left:9.5rem;
+  top: -500px; /* 세로선 위로 이동 */
+
+}
+
+
+
+
+
+.icon-item {
+  text-align: center; /* 텍스트와 실선을 중앙 정렬 */
+}
+
+.icon-item img {
+  display: block;
+  margin: 0 auto; /* 이미지를 중앙에 배치 */
+}
+
+.icon-item span {
+  position:relative;
+  display: block;
+  margin-top: 10px;
+  font-size: 48px;
+  color: #fff;
+  font-family: 'Gowun Dodum', sans-serif;
+  top:-480px;
+}
+
+.underline {
+  position:relative;
+  width: 70%; /* 실선 길이 */
+  height: 2px; /* 실선 두께 */
+  background-color: white; /* 하얀색 실선 */
+  margin: -120px 100px;; /* 중앙 정렬 */
+  top: -440px; /* 세로선 위로 이동 */
+  left:20px;
+}
+
+
+.vertical-line {
+  position: relative; /* 상대 위치 조정 */
+  width: 2px;
+  height: 797px;
+  background-color: white;
+  top: -540px; /* 세로선 위로 이동 */
+  left: 65px; /* 세로선 오른쪽으로 이동 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+body {
+  margin: 0;
+  overflow-y: hidden; /* 세로 스크롤 비활성화 */
+  overflow-x:hidden;
+}
+
+
+
+
+
+
+/*익명보드 -------------------------------------------------------*/
+.nonameboardScreen {
+  position:absolute;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: url('assets/background2.png') no-repeat center center/cover;
+  position: relative;
+  width: 100%; /* 화면 전체 너비 */
+  min-height: 100vh; /* 화면 최소 높이 */
+  display: flex;
+  flex-direction: column; /* 사이드바와 콘텐츠를 가로로 배치 */
+  align-items: flex-start; /* 상단 정렬 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+
+
+
+
+.nonameboard-write-button { /*게시글 작성하기 버튼*/
+  position:relative;
+  padding: 3px 12px;
+  background-color:rgba(0, 0, 0, 0.3);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 21px;
+  cursor: pointer;
+  margin-left:1420px;
+  margin-top:70px;
+  font-family : 'Gowun Dodum';
+}
+
+.nonameboard-write-button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 게시판 테이블 스타일 */
+.nonameboard-table {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.nonameboard-table-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 300px;
+  background-color: #4c4caa;
+  font-weight: bold;
+  border-bottom: 2px solid #fff;
+}
+
+.nonameboard-table-header div {
+  flex: 1;
+  text-align: center;
+}
+
+.nonameboard-table-body {
+  padding: 10px 200px;
+}
+
+
+.horizontal-line1 {
+  position: absolute; /* 상대 위치 조정 */
+  width: 1330px;
+  height: 1.2px;
+  background-color: white;
+  top: 96px; /* 세로선 위로 이동 */
+  left: 246px; /* 세로선 오른쪽으로 이동 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+  z-index:100;
+}
+
+
+.horizontal-line2 {
+  position: absolute; /* 상대 위치 조정 */
+  width: 1520px;
+  height: 2px;
+  background-color: white;
+  top: 220px; /* 세로선 위로 이동 */
+  left: 140px; /* 세로선 오른쪽으로 이동 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+.vertical-line1 {
+  position: absolute; /* 상대 위치 조정 */
+  width: 2px;
+  height: 55px;
+  background-color: white;
+  top: 166px; /* 세로선 위로 이동 */
+  left: 243px; /* 세로선 오른쪽으로 이동 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+.vertical-line2 {
+  position: absolute; /* 상대 위치 조정 */
+  width: 2px;
+  height: 55px;
+  background-color: white;
+  top: 166px; /* 세로선 위로 이동 */
+  left: 1415px; /* 세로선 오른쪽으로 이동 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+.nonameboard-tabletitle h1{
+  font-family:'Gowun Dodum';
+  width : 1500px;
+  position:absolute;
+  color : #FFFFFF;
+  height: 45px;
+  left: 162px;
+  top: 170px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+}
+
+
+
+
+
+.nonameboard-tablebody {
+  padding: 10px 10px;
+  height: auto;
+  width: 94%;
+  margin-top:85px;
+  margin-left :100px;
+}
+
+/* 버튼 스타일 */
+.nonameboard-tablerow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 18px; /* 적절한 패딩 */ /*익명보드 내용칸 높이*/
+  background-color: rgba(0, 0, 0, 0.4); /* 버튼을 잘 보이게 색상 조정 */
+  border-radius: 3px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px; /* 간격 추가 */
+}
+
+/* 내용 부분 크기 조정 */
+.nonameboard-rownumber {
+  flex: 0.05;
+  text-align: center;
+  border-right: 2px solid #fff; /* 세로선 추가 */
+  height: 100%; 
+  
+  font-size:28px;
+  font-family: 'Gowun Dodum';
+}
+
+.nonameboard-rowcontent {
+  flex: 0.77; /* 너비 조정 */
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align:left;
+  font-size:28px;
+  font-family: 'Gowun Dodum';
+  border-right: 1px solid #fff; /* 세로선 추가 */
+
+}
+
+.nonameboard-rowdate {
+  flex: 0.12;
+  text-align: center;
+  z-index:10;
+
+}
+
+
+.nonameboard-tablerow:hover {
+  background-color: rgba(0, 0, 0, 0.53);
+}
+
+
+
+.create-post-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.create-post-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.create-post-container input,
+.create-post-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.submit-button {
+  background-color: #4c4caa;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #333;
+}
+
+
+
+.cancel-button:hover {
+  background-color: #bbb;
+}
+
+
+
+
+button {
+  padding: 10px 20px;
+  background-color: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+
+/* 전체 컨테이너 */
+.post-detail-container {
+  width: 300%; /* 전체 너비 */
+  max-width: 1200px; /* 최대 너비 */
+  margin: 50px auto; /* 가운데 정렬 */
+
+  background-color: rgba(0, 0, 0, 0.3); /* 투명한 배경 */
+  padding: 20px 30px; /* 내부 여백 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  color: #fff; /* 텍스트 색상 */
+}
+
+/* 게시글 제목 */
+.post-detail-container h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+  font-weight: 400;
+  width:5500px;
+  font-family : 'Gowun Dodum';
+}
+
+/* 작성자와 작성일 */
+.post-detail-container p {
+  font-size: 32px;
+  font-weight:400;
+  width:1500px;
+  font-family: 'Gowun Dodum';
+  margin-left:90px;
+  margin-top:10px;
+  color: #ccc; /* 작성자와 작성일 회색 톤 */
+}
+
+/* 본문 내용 */
+.post-content {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* 댓글 섹션 */
+.comment-section {
+  margin-top: 30px;
+}
+
+.comment-section h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* 구분선 */
+  padding-bottom: 5px;
+}
+
+.comment {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.3); /* 댓글의 투명 배경 */
+  border-radius: 10px;
+}
+
+.comment-avatar {
+  width: 67px;
+  height: 67px;
+  background-color: #D3D5DF; /* 아바타 기본 색상 */
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.comment-content {
+  flex-grow: 3; /* 댓글 내용 너비 확장 */
+}
+
+.comment-content p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* 대댓글 버튼 */
+.reply-button {
+  margin-left: 10px;
+  font-size: 12px;
+  color: #4c4caa; /* 버튼 색상 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* 댓글 입력창 */
+.comment-input {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.comment-input textarea {
+  flex-grow: 1; /* 너비 확장 */
+  padding: 10px;
+  border-radius: 10px;
+
+  background-color: rgba(255, 255, 255, 0.2); /* 입력창 배경 */
+  color: #fff;
+  font-size: 14px;
+  resize: none;
+}
+
+.comment-input button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.2); /* 버튼 배경 */
+
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.comment-input button:hover {
+  background-color: #3a3a8c; /* 호버 효과 */
+}
+
+
+
+
+
+
+.nonameboardwriteScreen {
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+  width: 100%; /* 화면 전체 너비 */
+  min-height: 100vh; /* 화면 최소 높이 */
+  display: flex;
+  flex-direction: column; /* 사이드바와 콘텐츠를 가로로 배치 */
+  align-items: flex-start; /* 상단 정렬 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+
+
+.nonameboardwrite-title { 
+  display: flex;
+  align-items: center;
+}
+
+.nonameboardwrite-title img { /*익명보드 이모지*/
+position: absolute;
+width: 94.62px;
+height: 94px;
+left: 121.08px;
+top: 12px;
+}
+
+.nonameboardwrite-title h1 { /*익명보드 글자*/
+position: absolute;
+width: 215.4px;
+height: 70px;
+left: 243.88px;
+top: 24px;
+
+font-family: 'Gowun Dodum';
+font-style: normal;
+font-weight: 400;
+font-size: 48px;
+line-height: 70px;
+color: #D3D5DF;
+}
+
+
+
+
+
+
+.nonameboardScreen {
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+  width: 100%; /* 화면 전체 너비 */
+  min-height: 100vh; /* 화면 최소 높이 */
+  display: flex;
+  flex-direction: column; /* 사이드바와 콘텐츠를 가로로 배치 */
+  align-items: flex-start; /* 상단 정렬 */
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+
+
+.nonameboard-title { 
+  display: flex;
+  align-items: center;
+}
+
+.nonameboard-title img { /*익명보드 이모지*/
+position: absolute;
+width: 94.62px;
+height: 94px;
+left: 121.08px;
+top: 12px;
+}
+
+.nonameboard-title h1 { /*익명보드 글자*/
+position: absolute;
+width: 215.4px;
+height: 70px;
+left: 243.88px;
+top: 24px;
+
+font-family: 'Gowun Dodum';
+font-style: normal;
+font-weight: 400;
+font-size: 48px;
+line-height: 70px;
+color: #D3D5DF;
+}
+
+
+
+
+
+

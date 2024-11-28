@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로필 설정</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../Downloads/Hurdlethon2024_team_project_front/styles.css">
+</head>
+<body>
+    <div class="profileScreen">
+        <h1>프로필을 설정해주세요.</h1>
+        <img src="../../../../../Downloads/Hurdlethon2024_team_project_front/assets/프로필투명아이콘.png" alt="Profile">
+
+        <form>
+            <label for="profile-name">닉네임</label>
+            <input type="profile-text" id="name" placeholder="닉네임을 입력해주세요.">
+
+            <label for="gender">성별</label>
+            <select id="gender">
+                <option value="" disabled selected>성별을 선택해주세요.</option>
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+            </select>
+
+            <label for="profile-age">나이</label>
+            <input type="number" id="age" placeholder="나이를 입력해주세요.">
+
+            <label for="profile-occupation">관심사 (직군)</label>
+            <select id="occupation">
+                <option value="" disabled selected>성별을 선택해주세요.</option>
+                <option value="frontend">프론트엔드</option>
+                <option value="backend">백엔드</option>
+                <option value="marketer">마케터</option>
+                <option value="creator">크리에이터</option>
+                <option value="changup">창업자</option>
+            </select>
+
+
+            <label for="profile-activity">활동 반경</label>
+            <input type="text" id="activity" placeholder="활동 반경을 입력해주세요.">
+            <a href="index.html#loginScreen">
+                <button type="button" class="submit-btn">완료</button>
+            </a>
+              
+              
+        </form>
+    </div>
+  <script src="../../../../../Downloads/Hurdlethon2024_team_project_front/app.js"></script>
+</body>
+</html>
